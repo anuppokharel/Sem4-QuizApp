@@ -64,7 +64,7 @@
                     $username = '';
                     header('location: home.php');
                 } else {
-                    $error['database'] = 'No user found';
+                    $error['database'] = 'Invalid username or password';
                 }
 
             } catch (Exception $e) {

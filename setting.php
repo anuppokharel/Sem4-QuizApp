@@ -28,11 +28,11 @@
             if (strlen($currentpw) < 4) {
                 $error['currentpw'] = 'Invalid password';
             }
-            if (!preg_match("/^[a-zA-z]+[0-9]+$/", $currentpw)) {
-                $error['currentpw'] = 'Not a valid password';
-            }
             if (!($currentpwe == $currentpwd)) {
                 $error['currentpw'] = 'Your current password does not match';
+            }
+            if (!preg_match("/^[a-zA-Z]+[0-9]+$/", $currentpw)) {
+                $error['currentpw'] = 'Not a valid password';
             }
         } else {
             $error['currentpw'] = 'Provide your current password';
@@ -44,7 +44,7 @@
             if (strlen($newpw) < 4) {
                 $error['newpw'] = 'Invalid password';
             }
-            if (!preg_match("/^[a-zA-z]+[0-9]+$/", $newpw)) {
+            if (!preg_match("/^[a-zA-Z]+[0-9]+$/", $newpw)) {
                 $error['newpw'] = 'Not a valid password';
             }
         } else {
@@ -61,7 +61,7 @@
             if (!($confirmpw == $newpw)) {
                 $error['confirmpw'] = 'Password does not match';
             }
-            if (!preg_match("/^[a-zA-z]+[0-9]+$/", $confirmpw)) {
+            if (!preg_match("/^[a-zA-Z]+[0-9]+$/", $confirmpw)) {
                 $error['confirmpw'] = 'Not a valid password';
             }
         } else {
@@ -70,7 +70,7 @@
 
         if (count($error) == 0) {
             try {
-                $sql = "update tbl_users set password = $confirmpwe where username = '$username' and password = '$currentpwd'";
+                $sql = "update tbl_users set password = '$confirmpwe' where username = '$username'";
 
                 $query = mysqli_query($connection, $sql);
 
@@ -103,7 +103,7 @@
     </div>
     <div class="body-container">
         <h3 class="body-header">
-            Settings - Account Settings - Change Password
+            Account Settings - Change Password
         </h3>
         <div class="card-wrapper">
             <div class="mainCard">
@@ -124,7 +124,7 @@
                     </div>
                     <?php echo checkError($error, 'confirmpw'); ?>
                     <div class="items passwordBtn">
-                        <button type="submit">Confirm</button>
+                        <button type="submit" name="passwordBtn">Confirm</button>
                     </div>
                 </form>
                 <div class="success-error">
