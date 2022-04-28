@@ -1,0 +1,408 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans');
+
+* {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Header  */
+
+.header {
+    background-color: #000;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.header .container .logo h1 {
+    color: #fff;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: max-content;
+}
+
+.profile-info a:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+.profile-info a i {
+    color: #fff;
+    font-size: 30px;
+    margin-top: 5px;
+    height: max-content;
+}
+
+.profile-dropdown {
+    display: none;
+    background-color: #fff;
+    position: absolute;
+    min-height: max-content;
+    min-width: max-content;
+    top: 75px;
+    right: 25px;
+    z-index: 2;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.profile-dropdown.active {
+    display: block;
+}
+
+.profile-dropdown-inner {
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-dropdown-inner .div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.profile-dropdown-inner .div small {
+    margin: 2.5px 0 0 0;
+    width: max-content;
+    cursor: pointer;
+}
+
+.profile-dropdown-inner .div #profileFullImg {
+    height: 50px;
+    width: 50px;
+}
+
+.profile-dropdown-inner .div2 a {
+    display: flex;
+    flex-direction: column;
+    color: #000;
+    padding: 5px 25px;
+}
+
+.profile-dropdown-inner a:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+/* Main container  */
+
+.body-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 15px;
+    min-height: 100vh;
+}
+
+.body-header {
+    margin: 25px 0 0 116.5px;
+}
+
+.body-header.quiz {
+    margin: 25px 0 0 116.5px;
+}
+
+.body-header.topics {
+    margin: 5px 0 0 116.5px;
+}
+
+.body-container .card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    background-color: #fff;
+    height: max-content;
+    padding: 0 2px 40px 2px;
+}
+
+.mainCard .card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    background-color: #fff;
+    height: max-content;
+    padding: 0 2px 0 2px;
+}
+
+.card-wrapper .statistics {
+    display: flex;
+    margin: 20px 0 20px 0;
+    width: max-content;
+}
+
+.container.profile .share {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.card-wrapper .statistics .statistics-inner .statistics-subheader {
+    display: flex;
+}
+
+.card-wrapper .statistics .statistics-inner {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-wrapper .statistics .statistics-inner.today {
+    margin: 0 50px 0 0;
+}
+
+.card-wrapper .statistics .statistics-inner.total {
+    margin: 0 0 0 50px;
+}
+
+.card-wrapper .statistics .statistics-inner .info-container {
+    display: flex;
+}
+
+.info-container .score {
+    margin: 5px 25px 5px 0;
+    padding: 10px 25px;
+    cursor: pointer;
+    border: 2.5px solid #000;
+}
+
+.info-container .score:hover {
+    background-color: #000;
+    color: #fff;
+}
+
+.info-container .score.average {
+    margin: 5px 0 5px 0;
+}
+
+.card {
+    transition: transform ease .5s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card.quiz {
+    height: 250px;
+    width: 250px;
+    margin: 20px 0 0 0;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.card.topics {
+    height: 150px;
+    width: 150px;
+    margin: 20px 0 0 0;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.mainCard {
+    margin: 25px auto 45px auto;
+    padding: 25px;
+    height: max-content;
+    width: max-content;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.container.profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    height: max-content;
+    margin: 10px 0;
+}
+
+form .items input {
+    margin: 5px 0;
+    padding: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+form .items textarea {
+    margin: 5px 0;
+    padding: 5px;
+    font-size: 16px;
+}
+
+form .items.gender {
+    margin: 10px 0;
+}
+
+form .items.gender input {
+    margin-left: 5px;
+}
+
+form .items.gender label {
+    margin: 5px 50px 0 0;
+}
+
+form .items.country,
+.items.city {
+    margin: 10px 0 0 0;
+}
+
+form .items select {
+    margin: 5px 0;
+    padding: 2.5px;
+}
+
+form .items.terms-condition input {
+    margin-left: 5px;
+}
+
+button {
+    margin: 10px 0;
+    padding: 5px;
+    border: 1px solid #000;
+    background-color: #000;
+    color: #fff;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.5;
+}
+
+.loginRegister span {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.label-username,
+.label-email {
+    display: flex;
+
+    justify-content: space-between;
+}
+
+.aboutUs p {
+    width: 1000px;
+}
+
+.items p a {
+    color: grey;
+
+}
+
+.items p a:hover {
+    color: black;
+}
+
+/* Footer  */
+
+.footer {
+    background-color: #000;
+}
+
+.footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+}
+
+.copyright {
+    color: #fff;
+}
+
+/* navbar  */
+
+.navbar ul {
+    display: flex;
+    list-style-type: none;
+}
+
+.navbar ul li {
+    margin: 0 5px;
+}
+
+.navbar-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-wrapper .profile {
+    margin-left: 10px;
+}
+
+.navbar.social ul {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Anchor tag  */
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+/* Image tag  */
+img {
+    cursor: pointer;
+}
+
+/* Label tag  */
+
+label {
+    text-transform: capitalize;
+}
+
+/* Id selector  */
+
+#profileImg {
+    height: 30px;
+    width: 30px;
+    border-radius: 50px;
+}
+
+#blogImg {
+    margin: 5px 5px 0 5px;
+    height: 140px;
+    width: 240px;
+}
+
+/* All  */
+
+a:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.success {
+    color: green;
+}
+
+.error {
+    color: red;
+}
+
+
+/* Media query  */
+
+@media all and (max-width: 1100px) {
+    .aboutUs p {
+        width: 800px;
+    }
+}
+
+@media all and (max-width: 900px) {
+    .aboutUs p {
+        width: 400px;
+    }
+}
