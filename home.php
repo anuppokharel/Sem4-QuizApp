@@ -22,10 +22,17 @@
         </h3>
         <div class="card-wrapper">
             <div class="card quiz">
-                <img src="images/blog-img/demo.jpg" alt="" id="blogImg">
-                <h3>Beginner</h3>
+                <a href="" style="color: #000">
+                    <img src="images/blog-img/demo.jpg" alt="" id="blogImg">
+                    <div class="question-header">
+                        <h3>What is the net worth of Elon Musk?</h3>
+                    </div>
+                    <div class="question-footer">
+                        <span>1999-06-21</span>
+                        <p>Category</p>
+                    </div>
+                </a>
             </div>
-            
         </div>
         <!-- <div class="body-footer quiz">
             <button>Load more</button>
@@ -35,8 +42,8 @@
         </h3>
         <div class="card-wrapper">
             <div class="card topics">
-                <img src="" alt="">
-                <h3>Beginner</h3>
+                <img src="images/topic-img/demo.jpg" alt="" id="topicImg">
+                <h4>Bank</h4>
             </div>
         </div>
         <!-- <div class="body-footer quiz">

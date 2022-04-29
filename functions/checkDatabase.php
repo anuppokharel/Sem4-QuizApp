@@ -4,7 +4,7 @@
     if (isset($_POST['username'])) {
         $username = $_POST['username'];
 
-        $sqlUsername = "select username from tbl_users where username = '$username'";
+        $sqlUsername = "select username from tbl_confidential where username = '$username'";
 
         $queryUsername = mysqli_query($connection, $sqlUsername);
 
@@ -19,7 +19,7 @@
 
         $email = $_POST['email'];
 
-        $sqlEmail = "select email from tbl_users where email = '$email'";
+        $sqlEmail = "select email from tbl_confidential where email = '$email'";
         
         $queryEmail = mysqli_query($connection, $sqlEmail);
         

@@ -120,14 +120,14 @@
         }
 
         if (isset($_POST['status'])) {
-            $status = 1;
+            $status = 2;
         } else {
-            $status = 0;
+            $error['status'] = 'Please accept our terms & conditions';
         }
 
         if (count($error) == 0) {
             try {
-                $sql = "insert into tbl_users(name, username, profile_img, email, password, phone, country, city, gender, status) values('$name','$username','$image','$email','$cPassword','$phone','$country','$city','$gender','$status')";
+                $sql = "insert into tbl_confidential(name, username, profile_img, email, password, phone, country, city, gender, status) values('$name','$username','$image','$email','$cPassword','$phone','$country','$city','$gender','$status')";
     
                 $query = mysqli_query($connection, $sql);
     

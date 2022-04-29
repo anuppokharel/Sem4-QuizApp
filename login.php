@@ -44,7 +44,7 @@
         
         if (count($error) == 0) {
             try {
-                $sql = "select * from tbl_users where username = '$username' and password = '$encPassword'";
+                $sql = "select * from tbl_confidential where username = '$username' and password = '$encPassword'";
 
                 $query = mysqli_query($connection, $sql);
 
@@ -61,8 +61,15 @@
                         setcookie('username', $username, time() + (7*24*60*60));
                     }
 
-                    $username = '';
-                    header('location: home.php');
+                    if ($userdata['status'] == 1) {
+                        $username = '';
+                        header("location: admin/adminDashboard.php");
+                    } else if ($userdata['status'] == 2) {
+                        $username = '';
+                        header('location: home.php');
+                    } else {
+
+                    }
                 } else {
                     $error['database'] = 'Invalid username or password';
                 }
@@ -123,6 +130,8 @@
                     <?php if (isset($_GET['msg']) && $_GET['msg'] == 1 ) { echo '<b><span class="success">Successfully registered</span></b>'; } ?>
                     <?php if (isset($_GET['msg']) && $_GET['msg'] == 2 ) { echo '<b><span class="success">Logout successfully</span></b>'; } ?>
                     <?php if (isset($_GET['msg']) && $_GET['msg'] == 3 ) { echo '<b><span class="error">Login to continue</span></b>'; } ?>
+                    <?php if (isset($_GET['msg']) && $_GET['msg'] == 4 ) { echo '<b><span class="error"></span></b>'; } ?>
+                    <?php if (isset($_GET['msg']) && $_GET['msg'] == 5 ) { echo '<b><span class="error">Not authorized</span></b>'; } ?>
                 </div>
             </div>
         </div>

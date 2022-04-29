@@ -8,7 +8,7 @@
 
 
     try {
-        $sql = "select * from tbl_users where username = '$username'";
+        $sql = "select * from tbl_confidential where username = '$username'";
 
         $query = mysqli_query($connection, $sql);
 
@@ -70,7 +70,7 @@
 
         if (count($error) == 0) {
             try {
-                $sql = "update tbl_users set password = '$confirmpwe' where username = '$username'";
+                $sql = "update tbl_confidential set password = '$confirmpwe' where username = '$username'";
 
                 $query = mysqli_query($connection, $sql);
 
