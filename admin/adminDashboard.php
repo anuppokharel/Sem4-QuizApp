@@ -3,11 +3,27 @@
     require '../includes/function.php';
 
     $error = [];
+    $countries = [];
     $users = [];
     $questions = [];
     $contacts = [];
     $admins = [];
+    $name = $username = $email = $phone = $password = $image = $country = $city = $status = '';
 
+    // Stuffs 
+
+    try {
+        $sql = "select * from tbl_countries order by country_name";
+        
+        $query = mysqli_query($connection, $sql);
+
+        while($country = mysqli_fetch_assoc($query)) {
+            array_push($countries, $country);
+        }
+
+    } catch (Exception $e) {
+        $error['connection'] = $e -> getMessage();
+    }
 
     // Dashboard 
 
@@ -181,7 +197,9 @@
     
                 if ($query) {
                     $name = $username = $email = $phone = $password = $image = $country = $city = $status = '';
-                    $successMsg = 'Admin added successfully';
+                    echo '<script language="javascript">';
+                    echo 'alert("Admin added successfully")';
+                    echo '</script>';
                 }
     
             } catch (Exception $e) {
@@ -189,6 +207,10 @@
             }
         }
     }
+
+    // Admin/User Status 
+
+    
 ?>
 
 <!DOCTYPE html>
@@ -313,42 +335,69 @@
                                     <div class="items addAdminBtn">
                                         <button type="submit" name="addAdminBtn">Register</button>
                                     </div>
+                                    <div class="items error">
+                                        <?php echo checkError($error, 'database'); ?>
+                                    </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="content">
                         <div class="status-inner-container">
-                            <h3>Admin Status</h3>
-                            <table border="1">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </table>
-                            <h3>User Status</h3>
-                            <table border="1">
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Username</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </table>
+                            <div class="admin-container">
+                                <h3>Admin Status</h3>
+                                <table border="1">
+                                    <tr>
+                                        <th>S.N.</th>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    <?php foreach ($admins as $key => $admin) { ?>
+                                        <tr>
+                                            <td><?php echo $key + 1; ?></td>
+                                            <td><?php echo $admin['name']; ?></td>
+                                            <td><?php echo $admin['username']; ?></td>
+                                            <td><?php echo $admin['email']; ?></td>
+                                            <td><?php echo $admin['phone']; ?></td>
+                                            <td>
+                                                <?php if ($admin['status'] == 0) { ?>
+                                                    <a href="" style="color: green">Unblock</a>
+                                                <?php } else { ?>
+                                                    <a href="" style="color: red">Block</a>
+                                                <?php } ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </table><br>
+                            </div>
+                            <div class="users-container">
+                                <h3>User Status</h3>
+                                <table border="1">
+                                    <tr>
+                                        <th>S.N.</th>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    <?php foreach ($users as $key => $user) { ?>
+                                        <tr>
+                                            <td><?php echo $key + 1; ?></td>
+                                            <td><?php echo $user['name']; ?></td>
+                                            <td><?php echo $user['username']; ?></td>
+                                            <td><?php echo $user['email']; ?></td>
+                                            <td><?php echo $user['phone']; ?></td>
+                                            <td>
+                                                <a href="" style="color: red">Block</a>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class="content">

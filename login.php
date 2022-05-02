@@ -57,6 +57,7 @@
                     $_SESSION['name'] = $userdata['name'];
                     $_SESSION['username'] = $userdata['username'];
                     $_SESSION['image'] = $userdata['profile_img'];
+                    $_SESSION['status'] = $userdata['status'];
 
                     if (isset($_POST['remember'])) {
                         setcookie('username', $username, time() + (7*24*60*60));

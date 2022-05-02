@@ -28,7 +28,11 @@
                         <div class="div2">
                             <a href="profile.php">Profile</a>
                             <a href="setting.php">Settings</a>
-                            <a href="includes/logout.php">Log Out</a>
+                            <?php if ($_SESSION['status'] == 1) { ?>
+                                <a href="../includes/logout.php">Log Out</a>
+                            <?php } else { ?>
+                                <a href="includes/logout.php">Log Out</a>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
