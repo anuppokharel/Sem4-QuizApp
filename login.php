@@ -53,8 +53,9 @@
 
                     session_start();
 
-                    $_SESSION['username'] = $userdata['username'];
+                    $_SESSION['token'] = $userdata['status'];
                     $_SESSION['name'] = $userdata['name'];
+                    $_SESSION['username'] = $userdata['username'];
                     $_SESSION['image'] = $userdata['profile_img'];
 
                     if (isset($_POST['remember'])) {

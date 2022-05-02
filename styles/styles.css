@@ -290,7 +290,7 @@ button:hover {
     opacity: 0.5;
 }
 
-.loginRegister span {
+.content .loginRegister span {
     width: 100%;
     margin: 0 auto;
 }
@@ -331,6 +331,124 @@ button:hover {
 
 .items p a:hover {
     color: black;
+}
+
+.admin-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+.admin-body .container {
+    background-color: #fff;
+    height: 75vh;
+    width: 75%;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.admin-body .container .tab-container {
+    display: flex;
+    height: 100%;
+}
+
+.admin-body .container .tab-container .tabs {
+    flex-basis: 25%;
+    background-color: #000;
+    color: #fff;
+}
+
+.admin-body .container .tab-container .tabs .button {
+    padding: 15px 30px;
+    cursor: pointer;
+}
+
+.admin-body .container .tab-container .tabs .button:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+.admin-body .container .tab-container .tabs .button.active {
+    background-color: #fff;
+    color: #000;
+}
+
+.admin-body .container .tab-container .contents {
+    flex-basis: 75%;
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-body .container .tab-container .contents .content {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    transform: translateY(100%);
+    transition: transform .9s ease;
+    height: 100%;
+}
+
+.admin-body .container .tab-container .contents .content.active {
+    transform: translateY(0);
+}
+
+.admin-body .container .tab-container .contents .content .content-inner-container {
+    border: 1px solid #000;
+    height: 100%;
+}
+
+.admin-body .container .tab-container .contents .content .total-inner-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #000;
+    height: 100%;
+}
+
+.admin-body .container .tab-container .contents .content .total-inner-container .total {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 25px 50px;
+    margin: 0 15px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.admin-body .container .tab-container .contents .content .addAdmin-inner-container .addAdmin {
+    padding: 25px 215px 0 215px;
+    border: 1px solid #000;
+}
+
+.admin-body .container .tab-container .contents .content .status-inner-container {
+    border: 1px solid #000;
+    padding: 25px 263px;
+    height: 100%;
+}
+
+.admin-body .container .tab-container .contents .content .question-inner-container {
+    padding: 25px 230px;
+    border: 1px solid #000;
+    height: 100%;
+}
+
+.admin-body .container .tab-container .contents .content .topic-inner-container {
+    padding: 25px 230px;
+    border: 1px solid #000;
+    height: 100%;
+}
+
+.admin-body .container .tab-container .contents .content .list-inner-container {
+    border: 1px solid #000;
+    padding: 25px 245px;
+    height: 100%;
+}
+
+.admin-body .container .tab-container .contents .content .contact-inner-container {
+    border: 1px solid #000;
+    padding: 25px 254px;
+    height: 100%;
 }
 
 /* Footer  */

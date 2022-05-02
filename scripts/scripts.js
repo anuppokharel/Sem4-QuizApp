@@ -1,3 +1,5 @@
+// jQuery 
+
 $(document).ready(function () {
     $('#profileImg').on('click', function () {
         $('.profile-dropdown').toggleClass("active");
@@ -64,4 +66,33 @@ $(document).ready(function () {
             }
         });
     });
+
 });
+
+// JavaScript 
+
+const tabButtons = document.querySelectorAll('.tab-container .tabs .button');
+const tabContents = document.querySelectorAll('.tab-container .contents .content');
+
+let buttons = [];
+for (let i = tabButtons.length; i--; buttons.unshift(tabButtons[i]));
+
+let contents = [];
+for (let i = tabContents.length; i--; contents.unshift(tabContents[i]));
+
+buttons.forEach(changeContent);
+
+function changeContent(button, index) {
+    button.addEventListener('click', () => {
+        buttons.forEach(button => {
+            button.classList.remove('active');
+        });
+        button.classList.add('active');
+        contents.forEach(content => {
+            content.classList.remove('active');
+            content.style.transitionDelay = "translateY(0s)";
+        });
+        contents[index].classList.add('active');
+        contents[index].style.transitionDelay = "translateY(0.3s)";
+    });
+}

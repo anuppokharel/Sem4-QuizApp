@@ -3,6 +3,7 @@
 
     require 'includes/connection.php';
     require 'includes/function.php';
+    require 'includes/admin.php';
 
     $error = [];
     $username = $email = $message = '';
