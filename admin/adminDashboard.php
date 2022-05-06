@@ -4,11 +4,13 @@
 
     $error = [];
     $countries = [];
+    $topics = [];
     $users = [];
     $questions = [];
     $contacts = [];
     $admins = [];
     $name = $username = $email = $phone = $password = $image = $country = $city = $status = '';
+    $topicName = $image = $title = $answer = $topic = '';
 
     // Stuffs 
 
@@ -24,7 +26,7 @@
     } catch (Exception $e) {
         $error['connection'] = $e -> getMessage();
     }
-
+    
     // Dashboard 
 
     try {
@@ -53,6 +55,20 @@
             }
         }
 
+    } catch (Exception $e) {
+        $error['database'] = $e -> getMessage();
+    }
+
+    try {
+        $sql = "select * from tbl_topics";
+
+        $query = mysqli_query($connection, $sql);
+
+        if (mysqli_num_rows($query) > 0) {
+            while($topic = mysqli_fetch_assoc($query)) {
+                array_push($topics, $topic);
+            }
+        }
     } catch (Exception $e) {
         $error['database'] = $e -> getMessage();
     }
@@ -165,16 +181,16 @@
                         $image = uniqid() . '_' . $_FILES['image']['name'];
                         move_uploaded_file($_FILES['image']['tmp_name'], 'images/profile-img/' . $image);
                     } else {
-                        $error['image'] = 'Upload valid image type';
+                        $error['imageAddAdmin'] = 'Upload valid image type';
                     }
                 } else {
-                    $error['image'] = 'Upload less then 512kb image';
+                    $error['imageAddAdmin'] = 'Upload less then 512kb image';
                 }   
             } else {
-                $error['image'] = 'Upload valid image';
+                $error['imageAddAdmin'] = 'Upload valid image';
             }
         } else {
-            $error['image'] = 'Upload image';
+            $error['imageAddAdmin'] = 'Upload image';
         }
 
         if (checkForm($_POST, 'country')) {
@@ -208,8 +224,107 @@
         }
     }
 
-    // Admin/User Status 
+    // Add Topic
 
+    if (isset($_POST['addTopicBtn'])) {
+        if (checkForm($_POST, 'topicName')) {
+            $topicName = $_POST['topicName'];
+        } else {
+            $error['topicName'] = 'Enter your topic name';
+        }
+        
+        if (isset($_FILES['image']['name']) && $_FILES['image']['error'] == 0) {
+            if ($_FILES['image']['size'] < 10240000) {
+                $file_types = ['images/jpg', 'image/jpeg', 'image/png', 'image/gif'];
+                if (in_array($_FILES['image']['type'], $file_types)) {
+                    $image = uniqid() . '_' . $_FILES['image']['name'];
+                    move_uploaded_file($_FILES['photo']['tmp_name'], '../images/topic-img/' . $image);
+                } else {
+                    $error['imageTopic'] = 'Upload valid image type';
+                }
+            } else {
+                $error['imageTopic'] = 'Upload image less then 1024mb';
+            }
+        } else {
+            $error['imageTopic'] = 'Upload image';
+        }
+
+        if (count($error) == 0) {
+            try {
+                $sql = "insert into tbl_topics(topic_name, image) values('$topicName', '$image')";
+
+                $query = mysqli_query($connection, $sql);
+
+                if ($query) {
+                    $topicName = $image = '';
+                    echo '<script language="javascript">';
+                    echo 'alert("Topic added")';
+                    echo '</script>';
+                }
+            } catch (Exception $e) {
+                $error['database'] = $e -> getMessage();
+            }
+        }
+    }
+
+    // Add Questions & Answers
+
+    if (isset($_POST['addQuestionsAnswers'])) {
+        if (checkForm($_POST, 'title')) {
+            $title = $_POST['title'];
+        } else {
+            $error['questionTitle'] = 'Enter the title of your question';
+        }
+        
+        if (checkForm($_POST, 'answer')) {
+            $answer = trim($_POST['answer']);
+        } else {
+            $error['answer'] = 'Enter the answer of your question';
+        }
+        
+        if (isset($_FILES['image']['name']) && $_FILES['image']['error'] == 0) {
+            if ($_FILES['image']['size'] < 10240000) {
+                $imageTypes = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'];
+                if (in_array($_FILES['image']['type'], $imageTypes)) {
+                    $image = uniqid() . '_' . $_FILES['image']['name'];
+                    move_uploaded_file($_FILES['image']['tmp_name'], '../images/blog-img/' . $image);
+                } else {
+                    $error['imageQuestion'] = 'Upload valid image type';
+                }
+            } else {
+                $error['imageQuestion'] = 'Upload image with less then 1024mb';
+            }
+        } else {
+            $error['imageQuestion'] = 'Upload image';
+        }
+
+        if (checkForm($_POST, 'topic_id')) {
+            $topic_id = $_POST['topic_id'];
+        } else {
+            $error['topic_id'] = 'Select the topic of your question';
+        }
+        
+        if (count($error) == 0) {
+            try {
+                $sql = "insert into tbl_questions(title, answer, question_image, topic_id) values('$title','$answer','$image','$topic_id')";
+
+                $query = mysqli_query($connection, $sql);
+
+                if ($query) {
+                    $title = $answer = $topic = '';
+                    echo '<script language="javascript">';
+                    echo 'alert("Successfully added question")';
+                    echo '</script>';
+                }
+            } catch (Exception $e) {
+                $error['database '] = $e -> getMessage();
+            }
+        } else {
+                    echo '<script language="javascript">';
+                    echo 'alert("dsgadfw")';
+                    echo '</script>';
+        }
+    }
     
 ?>
 
@@ -233,9 +348,9 @@
                 <div class="tabs">
                     <div class="button active">Dashboard</div>
                     <div class="button">Add Admin</div>
-                    <div class="button">Admin/User Status</div>
-                    <div class="button">Add Questions & Answers</div>
                     <div class="button">Add Topics/Categories</div>
+                    <div class="button">Add Questions & Answers</div>
+                    <div class="button">Admin/User Status</div>
                     <div class="button">List Questions & Topics</div>
                     <div class="button">View Contact Messages</div>
                 </div>
@@ -312,13 +427,13 @@
                                     <?php echo checkError($error, 'gender'); ?>
                                     <div class="items image">
                                         <label for="image">add image</label><br>
-                                        <input type="file" name="image" id="image">            
+                                        <input type="file" name="image" id="addImage">            
                                     </div>
-                                    <?php echo checkError($error, 'image'); ?>
+                                    <?php echo checkError($error, 'imageAddAdmin'); ?>
                                     <div class="items country">
                                         <label for="country">country</label><br>
                                         <select name="country" id="country">
-                                            <option value="">Select your country</option>
+                                            <option value=""><b>Select your country</b></option>
                                             <?php foreach($countries as $country) { ?>
                                                 <option value="<?php echo $country['id']; ?>"><?php echo $country['country_name']; ?></option>
                                             <?php } ?>
@@ -328,18 +443,71 @@
                                     <div class="items city">
                                         <label for="city">city</label><br>
                                         <select name="city" id="city">
-                                            <option value="">Select your city</option>
+                                            <option value=""><b>Select your city</b></option>
                                         </select>
                                     </div>
                                     <?php echo checkError($error, 'city'); ?>
                                     <div class="items addAdminBtn">
-                                        <button type="submit" name="addAdminBtn">Register</button>
+                                         <button type="submit" name="addAdminBtn">Add</button>
                                     </div>
                                     <div class="items error">
                                         <?php echo checkError($error, 'database'); ?>
                                     </div>
                                 </form>
                             </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="topic-inner-container">
+                            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
+                                <div class="items title">
+                                    <label for="topicName">Topic name</label>
+                                    <input type="text" name="topicName" id="topicName" placeholder="Enter the name of topic">
+                                </div>
+                                <?php echo checkError($error, 'topicName'); ?>
+                                <div class="items image">
+                                    <label for="tImage">Topic image</label>
+                                    <input type="file" name="image" id="tImage">
+                                </div>
+                                <?php echo checkError($error, 'imageTopic'); ?>
+                                <div class="items button">
+                                    <button type="submit" name="addTopicBtn">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="question-inner-container">
+                            <form action="<?php echo $_SERVER['PHP_MYSELF']; ?>" method="post" enctype="multipart/form-data">
+                                <div class="items title">
+                                    <label for="title">title</label>
+                                    <input type="text" name="title" id="title" placeholder="Enter the title of your question"><br>
+                                </div>
+                                <?php echo checkError($error, 'questionTitle'); ?>
+                                <div class="items">
+                                    <label for="answer">answer</label>
+                                    <input type="text" name="answer" id="answer" placeholder="Submit your password"><br>
+                                </div>
+                                <?php echo checkError($error, 'answer'); ?>
+                                <div class="items image">
+                                    <label for="qImage">Image</label><br>
+                                    <input type="file" name="image" id="qImage"><br>
+                                </div>
+                                <?php echo checkError($error, 'imageQuestion'); ?>
+                                <div class="items options">
+                                    <select name="topic_id" id="topic_id">
+                                        <option value=""><b>Select your topic</b></option>
+                                        <?php foreach($topics as $topic) { ?>
+                                            <option value="<?php echo $topic['id']; ?>"><?php echo $topic['topic_name']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <?php echo checkError($error, 'topic_id'); ?>
+                                <div class="items button">
+                                    <button type="submit" name="addQuestionsAnswers">Add</button>
+                                    <?php echo checkError($error, 'database'); ?>
+                                </div>
+                            </form>
                         </div>
                     </div>
                     <div class="content">
@@ -363,16 +531,16 @@
                                             <td><?php echo $admin['email']; ?></td>
                                             <td><?php echo $admin['phone']; ?></td>
                                             <td>
-                                                <?php if ($admin['status'] == 0) { ?>
-                                                    <a href="" style="color: green">Unblock</a>
-                                                <?php } else { ?>
-                                                    <a href="" style="color: red">Block</a>
+                                                <?php if ($admin['block'] == 0) { ?>
+                                                    <a href="functions/unblock.php?token=<?php echo $admin['id']; ?>&name=<?php echo $admin['name']; ?>" style="color: green" onclick="return confirm('Are you sure you want to unblock this admin')">Unblock</a>
+                                                    <?php } else { ?>
+                                                        <a href="functions/block.php?token=<?php echo $admin['id']; ?>&name=<?php echo $admin['name']; ?>" style="color: red" onclick="return confirm('Are you sure you want to block this admin?')">Block</a>
+                                                        <?php } ?>
+                                                    </td>
+                                                </tr>
                                                 <?php } ?>
-                                            </td>
-                                        </tr>
-                                    <?php } ?>
-                                </table><br>
-                            </div>
+                                            </table><br>
+                                        </div>
                             <div class="users-container">
                                 <h3>User Status</h3>
                                 <table border="1">
@@ -392,7 +560,12 @@
                                             <td><?php echo $user['email']; ?></td>
                                             <td><?php echo $user['phone']; ?></td>
                                             <td>
-                                                <a href="" style="color: red">Block</a>
+                                                <?php if ($user['block'] == 0) { ?>
+                                                    <a href="functions/unblock.php?token=<?php echo $user['id']; ?>&name=<?php echo $user['name']; ?>" style="color: green" onclick= "return confirm('Are you sure you want to unblock this user?')">Unblock</a>
+                                                <?php } else { ?>
+                                                    <a href="functions/block.php?token=<?php echo $user['id']; ?>&name=<?php echo $user['name']; ?>" style="color: red" onclick= "return confirm('Are you sure you want to block this user?')">Block</a>
+                                                <?php } ?>
+                                                
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -401,72 +574,38 @@
                         </div>
                     </div>
                     <div class="content">
-                        <div class="question-inner-container">
-                            <form action="">
-                                <div class="items title">
-                                    <label for="title">title</label>
-                                    <input type="text" name="title" id="title" placeholder="Enter the title of your question"><br>
-                                </div>
-                                <div class="items">
-                                    <label for="answers">answers</label>
-                                    <input type="text" name="answers" id="answers" placeholder="Submit your password"><br>
-                                </div>
-                                <div class="items image">
-                                    <label for="questionImage">Image</label><br>
-                                    <input type="file" name="questionImage" id="questionImage"><br>
-                                </div>
-                                <div class="items options">
-                                    <select name="topic" id="topic">
-                                        <option value="">Select your topic</option>
-                                    </select>
-                                </div>
-                                <div class="items button">
-                                    <button>Add</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="content">
-                        <div class="topic-inner-container">
-                            <form action="">
-                                <div class="items title">
-                                    <label for="topicName">Topic name</label>
-                                    <input type="text" name="topicName" id="topicName" placeholder="Enter the name of topic">
-                                </div>
-                                <div class="items button">
-                                    <button>Add</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="content">
                         <div class="list-inner-container">
                             <h3>Questions</h3>
                             <table border="1">
                                 <tr>
-                                    <th>topic</th>
-                                    <th>title</th>
-                                    <th>answer</th>
-                                    <th>posted_by</th>
-                                    <th>action</th>
+                                    <th>Topic</th>
+                                    <th>Title</th>
+                                    <th>Answer</th>
+                                    <th>Created at</th>
+                                    <th>Action</th>
                                 </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                                <?php foreach($questions as $question) { ?>
+                                    <tr>
+                                        <td><?php echo $question['topic_id']; ?></td>
+                                        <td><?php echo $question['title']; ?></td>
+                                        <td><?php echo $question['answer']; ?></td>
+                                        <td><?php echo $question['created at']; ?></td>
+                                        <td><a href="" style="color: red">Block</a></td>
+                                    </tr>
+                                <?php } ?>
                             </table>
                             <h3>Topics</h3>
                             <table border="1">
                                 <tr>
-                                    <th>topic name</th>
-                                    <th>action</th>
+                                    <th>Topic name</th>
+                                    <th>Action</th>
                                 </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                                <?php foreach($topics as $topic) { ?>
+                                    <tr>
+                                        <td><?php echo $topic['topic_name']; ?></td>
+                                        <td><a href="" style="color: red">Block</a></td>
+                                    </tr>
+                                <?php } ?>
                             </table>
                         </div>
                     </div>
@@ -475,17 +614,19 @@
                             <h3>Contact messages</h3>
                             <table border="1">
                                 <tr>
-                                    <th>username</th>
-                                    <th>email</th>
-                                    <th>message</th>
-                                    <th>action</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Message</th>
+                                    <th>Action</th>
                                 </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
+                                <?php foreach($contacts as $contact) { ?>
+                                    <tr>
+                                        <td><?php echo $contact['username']; ?></td>
+                                        <td><?php echo $contact['email']; ?></td>
+                                        <td><?php echo $contact['message']; ?></td>
+                                        <td><a href="" style="color: red">Block</a></td>
+                                    </tr>
+                                <?php } ?>
                             </table>
                         </div>
                     </div>

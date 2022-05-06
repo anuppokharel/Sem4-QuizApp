@@ -44,7 +44,7 @@
         
         if (count($error) == 0) {
             try {
-                $sql = "select * from tbl_confidential where username = '$username' and password = '$encPassword'";
+                $sql = "select * from tbl_confidential where username = '$username' and password = '$encPassword' and block = 1";
 
                 $query = mysqli_query($connection, $sql);
 
