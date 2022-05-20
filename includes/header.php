@@ -22,8 +22,8 @@
                 <div class="profile-dropdown">
                     <div class="profile-dropdown-inner">
                         <div class="div">
-                            <img src="images/profile-img/<?php echo $_SESSION['image']; ?>" id="profileFullImg">
-                            <small id="profileName"><?php echo $_SESSION['name']; ?></small>
+                            <img src="images/profile-img/<?php if(isset($_SESSION['image'])) { echo $_SESSION['image']; } ?>" id="profileFullImg">
+                            <small id="profileName"><?php if(isset($_SESSION['image'])) { echo $_SESSION['name']; } ?></small>
                         </div>
                         <div class="div2">
                             <a href="profile.php">Profile</a>

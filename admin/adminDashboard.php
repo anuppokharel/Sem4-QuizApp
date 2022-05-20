@@ -217,7 +217,9 @@
                     echo 'alert("Admin added successfully")';
                     echo '</script>';
                 }
-    
+                
+                header('location: adminDashboard.php');
+                
             } catch (Exception $e) {
                 $error['database'] = $e -> getMessage();
             }
@@ -238,7 +240,7 @@
                 $file_types = ['images/jpg', 'image/jpeg', 'image/png', 'image/gif'];
                 if (in_array($_FILES['image']['type'], $file_types)) {
                     $image = uniqid() . '_' . $_FILES['image']['name'];
-                    move_uploaded_file($_FILES['photo']['tmp_name'], '../images/topic-img/' . $image);
+                    move_uploaded_file($_FILES['image']['tmp_name'], '../images/topic-img/' . $image);
                 } else {
                     $error['imageTopic'] = 'Upload valid image type';
                 }
@@ -270,10 +272,38 @@
     // Add Questions & Answers
 
     if (isset($_POST['addQuestionsAnswers'])) {
-        if (checkForm($_POST, 'title')) {
-            $title = $_POST['title'];
+        if (checkForm($_POST, 'question')) {
+            $question = $_POST['question'];
+
+            if (strlen($question) > 47) {
+                $error['question'] = 'Question character should be less then 47 characters';
+            }
         } else {
-            $error['questionTitle'] = 'Enter the title of your question';
+            $error['question'] = 'Enter your question';
+        }
+        
+        if (checkForm($_POST, 'firstOption')) {
+            $firstOption = trim($_POST['firstOption']);
+        } else {
+            $error['firstOption'] = 'Enter the first option of your question';
+        }
+        
+        if (checkForm($_POST, 'secondOption')) {
+            $secondOption = trim($_POST['secondOption']);
+        } else {
+            $error['secondOption'] = 'Enter the second option of your question';
+        }
+        
+        if (checkForm($_POST, 'thirdOption')) {
+            $thirdOption = trim($_POST['thirdOption']);
+        } else {
+            $error['thirdOption'] = 'Enter the third option of your question';
+        }
+        
+        if (checkForm($_POST, 'fourthOption')) {
+            $fourthOption = trim($_POST['fourthOption']);
+        } else {
+            $error['fourthOption'] = 'Enter the fourth option of your question';
         }
         
         if (checkForm($_POST, 'answer')) {
@@ -306,7 +336,7 @@
         
         if (count($error) == 0) {
             try {
-                $sql = "insert into tbl_questions(title, answer, question_image, topic_id) values('$title','$answer','$image','$topic_id')";
+                $sql = "insert into tbl_questions(question, firstOption, secondOption, thirdOption, fourthOption, answer, question_image, topic_id) values('$title', '$firstOption', '$secondOption', '$thirdOption', '$fourthOption', '$answer','$image','$topic_id')";
 
                 $query = mysqli_query($connection, $sql);
 
@@ -319,10 +349,6 @@
             } catch (Exception $e) {
                 $error['database '] = $e -> getMessage();
             }
-        } else {
-                    echo '<script language="javascript">';
-                    echo 'alert("dsgadfw")';
-                    echo '</script>';
         }
     }
     
@@ -479,14 +505,40 @@
                     <div class="content">
                         <div class="question-inner-container">
                             <form action="<?php echo $_SERVER['PHP_MYSELF']; ?>" method="post" enctype="multipart/form-data">
-                                <div class="items title">
-                                    <label for="title">title</label>
-                                    <input type="text" name="title" id="title" placeholder="Enter the title of your question"><br>
+                                <div class="items question">
+                                    <label for="question">question</label>
+                                    <input type="text" name="question" id="question" placeholder="Enter your question"><br>
                                 </div>
-                                <?php echo checkError($error, 'questionTitle'); ?>
+                                <?php echo checkError($error, 'question'); ?>
                                 <div class="items">
-                                    <label for="answer">answer</label>
-                                    <input type="text" name="answer" id="answer" placeholder="Submit your password"><br>
+                                    <label for="firstOption">first option</label>
+                                    <input type="text" name="firstOption" id="firstOption" placeholder="Submit your first option"><br>
+                                </div>
+                                <?php echo checkError($error, 'firstOption'); ?>
+                                <div class="items">
+                                    <label for="secondOption">second option</label>
+                                    <input type="text" name="secondOption" id="secondOption" placeholder="Submit your second option"><br>
+                                </div>
+                                <?php echo checkError($error, 'secondOption'); ?>
+                                <div class="items">
+                                    <label for="thirdOption">third option</label>
+                                    <input type="text" name="thirdOption" id="thirdOption" placeholder="Submit your third option"><br>
+                                </div>
+                                <?php echo checkError($error, 'thirdOption'); ?>
+                                <div class="items">
+                                    <label for="fourthOption">fourth option</label>
+                                    <input type="text" name="fourthOption" id="fourthOption" placeholder="Submit your fourth option"><br>
+                                </div>
+                                <?php echo checkError($error, 'fourthOption'); ?>
+                                <div class="items">
+                                    <label for="answer">Answer</label><br>
+                                    <select name="answer" id="answer">
+                                        <option value="">Select your answer</option>
+                                        <option value="firstOption">First Option</option>
+                                        <option value="secondOption">Second Option</option>
+                                        <option value="thirdOption">Third Option</option>
+                                        <option value="fourthOption">Fourth Option</option>
+                                    </select>
                                 </div>
                                 <?php echo checkError($error, 'answer'); ?>
                                 <div class="items image">
@@ -494,7 +546,7 @@
                                     <input type="file" name="image" id="qImage"><br>
                                 </div>
                                 <?php echo checkError($error, 'imageQuestion'); ?>
-                                <div class="items options">
+                                <div class="items option">
                                     <select name="topic_id" id="topic_id">
                                         <option value=""><b>Select your topic</b></option>
                                         <?php foreach($topics as $topic) { ?>
@@ -513,7 +565,7 @@
                     <div class="content">
                         <div class="status-inner-container">
                             <div class="admin-container">
-                                <h3>Admin Status</h3>
+                                <h3 style="padding: 15px 0;">Admin Status</h3>
                                 <table border="1">
                                     <tr>
                                         <th>S.N.</th>
@@ -532,17 +584,18 @@
                                             <td><?php echo $admin['phone']; ?></td>
                                             <td>
                                                 <?php if ($admin['block'] == 0) { ?>
-                                                    <a href="functions/unblock.php?token=<?php echo $admin['id']; ?>&name=<?php echo $admin['name']; ?>" style="color: green" onclick="return confirm('Are you sure you want to unblock this admin')">Unblock</a>
-                                                    <?php } else { ?>
-                                                        <a href="functions/block.php?token=<?php echo $admin['id']; ?>&name=<?php echo $admin['name']; ?>" style="color: red" onclick="return confirm('Are you sure you want to block this admin?')">Block</a>
-                                                        <?php } ?>
-                                                    </td>
-                                                </tr>
+                                                    <a href="functions/unblock.php?token=<?php echo $admin['id']; ?>" style="color: green" onclick="return confirm('Are you sure you want to unblock this admin')">Unblock</a>
+                                                <?php } else { ?>
+                                                    <a href="functions/block.php?token=<?php echo $admin['id']; ?>" style="color: red" onclick="return confirm('Are you sure you want to block this admin?')">Block</a>
                                                 <?php } ?>
-                                            </table><br>
-                                        </div>
+                                                <br><a href="functions/delete.php?token=<?php echo $admin['id']; ?>" style="color: red" onclick="return confirm('Are you sure you want to delete this admin?')">Delete</a>
+                                            </td>
+                                        </tr>   
+                                    <?php } ?>
+                                </table>
+                            </div>
                             <div class="users-container">
-                                <h3>User Status</h3>
+                                <h3 style="padding: 15px 0;">User Status</h3>
                                 <table border="1">
                                     <tr>
                                         <th>S.N.</th>
@@ -561,11 +614,11 @@
                                             <td><?php echo $user['phone']; ?></td>
                                             <td>
                                                 <?php if ($user['block'] == 0) { ?>
-                                                    <a href="functions/unblock.php?token=<?php echo $user['id']; ?>&name=<?php echo $user['name']; ?>" style="color: green" onclick= "return confirm('Are you sure you want to unblock this user?')">Unblock</a>
+                                                    <a href="functions/unblock.php?token=<?php echo $user['id']; ?>" style="color: green" onclick= "return confirm('Are you sure you want to unblock this user?')">Unblock</a>
                                                 <?php } else { ?>
-                                                    <a href="functions/block.php?token=<?php echo $user['id']; ?>&name=<?php echo $user['name']; ?>" style="color: red" onclick= "return confirm('Are you sure you want to block this user?')">Block</a>
+                                                    <a href="functions/block.php?token=<?php echo $user['id']; ?>" style="color: red" onclick= "return confirm('Are you sure you want to block this user?')">Block</a>
                                                 <?php } ?>
-                                                
+                                                <br><a href="functions/delete.php?token=<?php echo $user['id']; ?>" style="color: red" onclick="return confirm('Are you sure you want to delete this admin?')">Delete</a>
                                             </td>
                                         </tr>
                                     <?php } ?>

@@ -175,7 +175,7 @@
                             <label for="username">username</label>
                             <span class="queryMsgUsername"></span>
                         </div>
-                        <input type="text" name="username" id="username" placeholder="Username" value="<?php echo $username; ?>">
+                        <input type="text" name="username" id="username" placeholder="Username" autocomplete="off" value="<?php echo $username; ?>">
                     </div>
                     <?php echo checkError($error, 'username'); ?>
                     <div class="items email">
@@ -183,7 +183,7 @@
                             <label for="email">email</label>
                             <span class="queryMsgEmail"></span>
                         </div>
-                        <input type="email" name="email" id="email" placeholder="Email" value="<?php echo $email; ?>">
+                        <input type="email" name="email" id="email" placeholder="Email" autocomplete="off" value="<?php echo $email; ?>">
                     </div>
                     <?php echo checkError($error, 'email'); ?>
                     <div class="items phone">

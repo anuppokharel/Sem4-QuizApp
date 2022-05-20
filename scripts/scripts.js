@@ -71,9 +71,15 @@ $(document).ready(function () {
 
 // JavaScript 
 
+
+// For admin dashboard left tab containers
+
+// Store all the button elements in tabButtons constant as well for content elements
+
 const tabButtons = document.querySelectorAll('.tab-container .tabs .button');
 const tabContents = document.querySelectorAll('.tab-container .contents .content');
 
+// Shift constant elements to an array
 let buttons = [];
 for (let i = tabButtons.length; i--; buttons.unshift(tabButtons[i]));
 
@@ -95,4 +101,86 @@ function changeContent(button, index) {
         contents[index].classList.add('active');
         contents[index].style.transitionDelay = "translateY(0.3s)";
     });
+}
+
+// For main quiz part
+// Retrieving the data from database 
+
+$.ajax({
+    url: 'functions/getQuestion.php',
+    data: { 'token': token },
+    datatype: 'text',
+    method: 'post',
+    success: function (data) {
+        qResponse = JSON.parse(data);
+        sendQuestion(qResponse);
+    }
+});
+
+function sendQuestion(qResponse) {
+    const quiz_container = document.querySelector('.mainCard');
+    const attempt_container = document.querySelector('.attempt-list');
+    const quiz_question = document.querySelector('.question-header h2');
+    const answers = document.querySelectorAll('.answer');
+    const aLabel = document.getElementById('a_label');
+    const bLabel = document.getElementById('b_label');
+    const cLabel = document.getElementById('c_label');
+    const dLabel = document.getElementById('d_label');
+    const quizBtn = document.getElementById('quizSubmit');
+
+    let score = 0;
+    const quizQuestions = [];
+    let currentQuestionIndex = 0;
+    quizQuestions.push(qResponse);
+
+    loadQuiz();
+
+    function loadQuiz() {
+        answers.forEach(answer => {
+            answer.checked = false;
+        });
+
+        const { question, firstOption, secondOption, thirdOption, fourthOption } = quizQuestions[currentQuestionIndex];
+
+        quiz_question.innerText = question;
+        aLabel.innerText = firstOption;
+        bLabel.innerText = secondOption;
+        cLabel.innerText = thirdOption;
+        dLabel.innerText = fourthOption;
+
+        attempt_container.innerHTML = `
+        <p><span>${currentQuestionIndex + 1}</span>out of<span>${quizQuestions.length}</span>question.&nbsp;</p>
+    `;
+    }
+
+    quizBtn.addEventListener('click', () => {
+        let userAnswer = getUserAnswer();
+
+        if (userAnswer === quizQuestions[currentQuestionIndex].answer) {
+            score++;
+        }
+        currentQuestionIndex++
+        if (currentQuestionIndex < quizQuestions.length) {
+            loadQuiz();
+        } else {
+            quiz_container.innerHTML = `
+                <h3>You have answered ${score} out of ${quizQuestions.length} questions </h3>
+                <div class="nextBtn">
+                    <button onclick="location.reload()">Reload Quiz</button>
+                </div>
+            `;
+        }
+    });
+
+    function getUserAnswer() {
+        let userAnswer;
+
+        answers.forEach(answer => {
+            if (answer.checked) {
+                userAnswer = answer.id;
+            }
+        });
+
+        return userAnswer;
+    }
 }

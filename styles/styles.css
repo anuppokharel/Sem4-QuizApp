@@ -125,15 +125,33 @@
     background-color: #fff;
     height: max-content;
     padding: 0 2px 40px 2px;
+    position: relative;
 }
 
-.mainCard .card-wrapper {
+.card-wrapper .card.topics::before {
+    content: '';
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.mainCard .card-wrapper,
+.body-container .card-wrapper.quiz {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
     background-color: #fff;
     height: max-content;
     padding: 0 2px 0 2px;
+}
+
+.card-wrapper #quizBtn {
+    padding: 20px 50px;
+    font-size: 24px;
+    font-weight: 500;
+    color: #fff;
+    background-color: #000;
 }
 
 .card-wrapper .statistics {
@@ -196,7 +214,7 @@
 }
 
 .card.quiz {
-    height: 250px;
+    height: 275px;
     width: 250px;
     margin: 20px 0 0 0;
     overflow: hidden;
@@ -215,9 +233,10 @@
 .card.topics h4 {
     position: absolute;
     color: #fff;
-    top: 65%;
-    left: 35%;
-    font-size: 24px;
+    top: 75%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
     font-weight: bolder;
 }
 
@@ -280,9 +299,11 @@ form .items.terms-condition input {
 button {
     margin: 10px 0;
     padding: 5px;
-    border: 1px solid #000;
-    background-color: #000;
+    border: 1.8px solid #000;
+    font-size: 14px;
+    font-weight: 500;
     color: #fff;
+    background-color: #000;
     cursor: pointer;
 }
 
@@ -303,6 +324,7 @@ button:hover {
 
 .question-header {
     margin: auto 5px;
+    user-select: none;
 }
 
 .question-footer {
@@ -310,7 +332,10 @@ button:hover {
     justify-content: space-between;
     text-align: center;
     align-items: center;
-    margin: 15px 10px 0 10px;
+    /* border: 1px solid #000; */
+    margin: 0 10px;
+    /* margin: 15px 10px; */
+    height: 75px;
 }
 
 .question-footer p {
@@ -318,6 +343,53 @@ button:hover {
     color: #fff;
     padding: 1.5px 6.5px 3px 6.5px;
     border-radius: 5px;
+}
+
+
+.options {
+    padding: 5px 25px;
+    /* border: 1px solid #000; */
+}
+
+.options ul li {
+    margin: 10px 0;
+}
+
+.options ul li input,
+.options ul li label {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.options ul li label {
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.attempt-list {
+    margin: 2.5px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.attempt-list p {
+    user-select: none;
+    border-bottom: 1px solid grey;
+
+}
+
+.attempt-list span {
+    padding: 0 5px;
+}
+
+.nextBtn {
+    display: flex;
+    justify-content: center;
+}
+
+#timeField,
+#categoryField {
+    user-select: none;
 }
 
 .aboutUs p {
@@ -528,6 +600,7 @@ label {
     margin: 5px 5px 0 5px;
     height: 140px;
     width: 240px;
+    object-fit: cover;
 }
 
 #topicImg {
@@ -564,3 +637,6 @@ a:hover {
         width: 400px;
     }
 }
+
+/* user-select: none; */
+/* pointer-events: none; */

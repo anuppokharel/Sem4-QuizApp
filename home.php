@@ -2,6 +2,39 @@
     session_start();
 
     require 'includes/admin.php';
+    require 'includes/function.php';
+    require 'includes/connection.php';
+
+    $topics = [];
+    $questions =[];
+
+    try {
+        $sql = "select * from tbl_topics";
+
+        $query = mysqli_query($connection, $sql);
+
+        if (mysqli_num_rows($query) > 0) {
+            while($topic = mysqli_fetch_assoc($query)) {
+                array_push($topics, $topic);
+            }
+        }
+    } catch (Exception $e) {
+        $error['database'] = $e -> getMessage();
+    }
+
+    try {
+        $sql = "select tbl_questions.*, tbl_topics.topic_name from tbl_questions join tbl_topics on tbl_questions.topic_id = tbl_topics.id";
+
+        $query = mysqli_query($connection, $sql);
+
+        if (mysqli_num_rows($query) > 0) {
+            while($question = mysqli_fetch_assoc($query)) {
+                array_push($questions, $question);
+            }
+        }
+    } catch (Exception $e) {
+        $error['database'] = $e -> getMessage();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -20,21 +53,29 @@
     </div>
     <div class="body-container">
         <h3 class="body-header quiz">
+            Start quiz    
+        </h3>
+        <div class="card-wrapper quiz">
+            <button type="submit" name="startQuiz" id="quizBtn">Start quiz</button>
+        </div>
+        <h3 class="body-header quiz">
             Recently quizzes
         </h3>
         <div class="card-wrapper">
-            <div class="card quiz">
-                <a href="" style="color: #000">
-                    <img src="images/blog-img/demo.jpg" alt="" id="blogImg">
-                    <div class="question-header">
-                        <h3>What is the net worth of Elon Musk?</h3>
-                    </div>
-                    <div class="question-footer">
-                        <span>1999-06-21</span>
-                        <p>Category</p>
-                    </div>
-                </a>
-            </div>
+            <?php foreach($questions as $question) { ?>
+                <div class="card quiz">
+                    <a href="question.php?id=<?php echo $question['id']; ?>" style="color: #000">
+                        <img src="images/blog-img/<?php echo $question['question_image']; ?>" alt="" id="blogImg">
+                        <div class="question-header">
+                            <h3><?php echo $question['question']; ?></h3>
+                        </div>
+                        <div class="question-footer">
+                            <span id="timeField"><?php echo getShortTime($question['created_at']); ?></span>
+                            <p id="categoryField"><?php echo $question['topic_name']; ?></p>
+                        </div>
+                    </a>
+                </div>
+            <?php } ?>
         </div>
         <!-- <div class="body-footer quiz">
             <button>Load more</button>
@@ -43,10 +84,12 @@
             Popular topics
         </h3>
         <div class="card-wrapper">
-            <div class="card topics">
-                <img src="images/topic-img/demo.jpg" alt="" id="topicImg">
-                <h4>Bank</h4>
-            </div>
+            <?php foreach($topics as $topic) { ?>
+                <div class="card topics">
+                    <img src="images/topic-img/<?php echo $topic['image']; ?>" alt="" id="topicImg">
+                    <h4><?php echo $topic['topic_name']; ?></h4>
+                </div>
+            <?php } ?>
         </div>
         <!-- <div class="body-footer quiz">
             <button>Load more</button>
