@@ -1,7 +1,7 @@
 <div class="header">
     <div class="container">
         <div class="logo">
-            <h1>Stock Quiz App</h1>
+            <a href="home.php"><h1>Stock Quiz App</h1></a>
         </div>
         <div class="navbar-wrapper">
             <div class="navbar header">

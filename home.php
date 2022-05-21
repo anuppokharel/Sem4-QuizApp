@@ -56,7 +56,7 @@
             Start quiz    
         </h3>
         <div class="card-wrapper quiz">
-            <button type="submit" name="startQuiz" id="quizBtn">Start quiz</button>
+            <a href="quiz.php?id=999" id="quizBtn">Start quiz</a>
         </div>
         <h3 class="body-header quiz">
             Recently quizzes

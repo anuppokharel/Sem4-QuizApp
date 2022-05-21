@@ -1,5 +1,5 @@
 <?php
-    error_reporting(E_ERROR);
+    // error_reporting(E_ERROR);
 
     function checkForm($method, $name) {
         if(isset($method[$name]) && !empty($method[$name]) && trim($method[$name])) {

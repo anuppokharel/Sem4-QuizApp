@@ -5,9 +5,10 @@
 
     $token = $_GET['id'];
     
-    echo '<script language="javascript">';
+    echo '<script lnguage="javascript">';
     echo 'let token =' . $token;
     echo '</script>';
+    
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +18,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="styles/styles.css" />
+    <link rel="stylesheet" href="styles/styles.css"/>
     <title>Document</title>
 </head>
 <body>
@@ -33,7 +34,7 @@
                 </div>
                 <div class="question-body">
                     <div class="attempt-list">
-                        <p><span>1</span>out of<span>5</span>question.&nbsp;</p>
+                        <p><span>0</span>out of<span>0</span>question.&nbsp;</p>
                     </div>
                     <div class="options">
                         <ul>
@@ -67,7 +68,7 @@
         <?php require 'includes/footer.php'; ?>
     </div>
 
-    <!-- jQuery & JS  -->
+    <!-- JavaScript & jQuery  -->
 
     <script src="lib/jquery/jQuery.js"></script>
     <script src="lib/jquery/dist/jquery.validate.js"></script>

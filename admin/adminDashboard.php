@@ -504,7 +504,7 @@
                     </div>
                     <div class="content">
                         <div class="question-inner-container">
-                            <form action="<?php echo $_SERVER['PHP_MYSELF']; ?>" method="post" enctype="multipart/form-data">
+                            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
                                 <div class="items question">
                                     <label for="question">question</label>
                                     <input type="text" name="question" id="question" placeholder="Enter your question"><br>
@@ -640,9 +640,9 @@
                                 <?php foreach($questions as $question) { ?>
                                     <tr>
                                         <td><?php echo $question['topic_id']; ?></td>
-                                        <td><?php echo $question['title']; ?></td>
+                                        <td><?php echo $question['question']; ?></td>
                                         <td><?php echo $question['answer']; ?></td>
-                                        <td><?php echo $question['created at']; ?></td>
+                                        <td><?php echo $question['created_at']; ?></td>
                                         <td><a href="" style="color: red">Block</a></td>
                                     </tr>
                                 <?php } ?>

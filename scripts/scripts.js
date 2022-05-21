@@ -109,17 +109,19 @@ function changeContent(button, index) {
 $.ajax({
     url: 'functions/getQuestion.php',
     data: { 'token': token },
-    datatype: 'text',
+    datatype: 'json',
+    async: 'disable',
     method: 'post',
     success: function (data) {
-        qResponse = JSON.parse(data);
-        sendQuestion(qResponse);
+        quizQuestions = JSON.parse(data);
+        sendQuestion(quizQuestions);
     }
 });
 
-function sendQuestion(qResponse) {
+function sendQuestion(quizQuestions) {
     const quiz_container = document.querySelector('.mainCard');
     const attempt_container = document.querySelector('.attempt-list');
+    const quiz_footer = document.querySelector('.question-footer');
     const quiz_question = document.querySelector('.question-header h2');
     const answers = document.querySelectorAll('.answer');
     const aLabel = document.getElementById('a_label');
@@ -127,11 +129,10 @@ function sendQuestion(qResponse) {
     const cLabel = document.getElementById('c_label');
     const dLabel = document.getElementById('d_label');
     const quizBtn = document.getElementById('quizSubmit');
+    const quiz_image = document.getElementById('blogImg');
 
     let score = 0;
-    const quizQuestions = [];
     let currentQuestionIndex = 0;
-    quizQuestions.push(qResponse);
 
     loadQuiz();
 
@@ -140,8 +141,9 @@ function sendQuestion(qResponse) {
             answer.checked = false;
         });
 
-        const { question, firstOption, secondOption, thirdOption, fourthOption } = quizQuestions[currentQuestionIndex];
+        const { question_image, question, firstOption, secondOption, thirdOption, fourthOption, created_at, topic_name } = quizQuestions[currentQuestionIndex];
 
+        quiz_image.src = `images/blog-img/${question_image}`;
         quiz_question.innerText = question;
         aLabel.innerText = firstOption;
         bLabel.innerText = secondOption;
@@ -150,7 +152,11 @@ function sendQuestion(qResponse) {
 
         attempt_container.innerHTML = `
         <p><span>${currentQuestionIndex + 1}</span>out of<span>${quizQuestions.length}</span>question.&nbsp;</p>
-    `;
+        `;
+        quiz_footer.innerHTML = `
+            <span id="timeField"></span>
+            <p id="categoryField">${topic_name}</p>
+        `;
     }
 
     quizBtn.addEventListener('click', () => {
@@ -182,5 +188,6 @@ function sendQuestion(qResponse) {
         });
 
         return userAnswer;
+
     }
 }
