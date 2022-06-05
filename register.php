@@ -237,6 +237,7 @@
                         <input type="checkbox" name="status" id="terms" value="checked" style="width: min-content">
                         <label for="terms">I accept the terms & condition</label>
                     </div>
+                    <?php echo checkError($error, 'status'); ?>
                     <div class="items registerBtn">
                         <button type="submit" name="registerBtn">Register</button>
                     </div>

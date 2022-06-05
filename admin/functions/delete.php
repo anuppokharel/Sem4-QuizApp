@@ -59,5 +59,15 @@
         }
     }
     
-    header("Refresh: 0; url=../adminDashboard.php");
+    if ($type == 'user') {
+        header('Refresh: 0; url=../adminDashboard.php?redirect=1');
+    } else if ($type == 'admin') {
+        header('Refresh: 0; url=../adminDashboard.php?redirect=2');
+    } else if ($type == 'topic') {
+        header('Refresh: 0; url=../adminDashboard.php?redirect=3');
+    } else if ($type == 'question') {
+        header('Refresh: 0; url=../adminDashboard.php?redirect=4');
+    } else if ($type == 'contact') {
+        header('Refresh: 0; url=../adminDashboard.php?redirect=8');
+    }
 ?>

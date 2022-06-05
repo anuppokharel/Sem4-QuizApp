@@ -71,10 +71,13 @@ $(document).ready(function () {
         });
     });
 
+    $('#changeProfilePicture').change(function () {
+        $('#changeProfilePictureForm').submit();
+    });
 });
 
-// JavaScript 
 
+// JavaScript
 
 // For admin dashboard left tab containers
 
@@ -107,11 +110,35 @@ function changeContent(button, index) {
     });
 }
 
-// For profile picture change 
 
-$('#changeProfilePicture').change(function () {
-    $('#changeProfilePictureForm').submit();
-});
+
+if (redirect) {
+    if (redirect == 1) {
+        const userStatus = document.getElementById("user-status");
+        userStatus.click()
+    } else if (redirect == 2) {
+        const adminStatus = document.getElementById("admin-status");
+        adminStatus.click()
+    } else if (redirect == 3) {
+        const listTopic = document.getElementById("list-topic");
+        listTopic.click()
+    } else if (redirect == 4) {
+        const listQuestion = document.getElementById("list-question");
+        listQuestion.click()
+    } else if (redirect == 5) {
+        const addAdmin = document.getElementById("add-admin");
+        addAdmin.click()
+    } else if (redirect == 6) {
+        const addTopic = document.getElementById("add-topic");
+        addTopic.click()
+    } else if (redirect == 7) {
+        const addQuestion = document.getElementById("add-question");
+        addQuestion.click()
+    } else if (redirect == 8) {
+        const contactMsg = document.getElementById("contact-msg");
+        contactMsg.click()
+    }
+}
 
 // For main quiz part
 // Retrieving the data from database 

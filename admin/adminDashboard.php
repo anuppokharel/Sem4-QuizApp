@@ -179,7 +179,7 @@
                     $imageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
                     if(in_array($_FILES['image']['type'], $imageTypes)) {
                         $image = uniqid() . '_' . $_FILES['image']['name'];
-                        move_uploaded_file($_FILES['image']['tmp_name'], 'images/profile-img/' . $image);
+                        move_uploaded_file($_FILES['image']['tmp_name'], '../images/profile-img/' . $image);
                     } else {
                         $error['imageAddAdmin'] = 'Upload valid image type';
                     }
@@ -218,7 +218,7 @@
                     echo '</script>';
                 }
                 
-                header('Refresh: 0; url=adminDashboard.php');
+                header('Refresh: 0; url=adminDashboard.php?redirect=5');
             } catch (Exception $e) {
                 $error['database'] = $e -> getMessage();
             }
@@ -263,7 +263,7 @@
                     echo '</script>';
                 }
 
-                header('Refresh: 0; url=adminDashboard.php');
+                header('Refresh: 0; url=adminDashboard.php?redirect=6');
             } catch (Exception $e) {
                 $error['database'] = $e -> getMessage();
             }
@@ -350,7 +350,7 @@
                     echo '</script>';
                 }
 
-                header('Refresh: 0; url=adminDashboard.php');
+                header('Refresh: 0; url=adminDashboard.php?redirect=7');
             } catch (Exception $e) {
                 die($e -> getMessage());
             }
@@ -361,13 +361,19 @@
         echo '<script language="javascript">';
         echo 'alert("You cannot delete the current admin")';
         echo '</script>';
-        header('Refresh: 0; url=adminDashboard.php');
+        header('Refresh: 0; url=adminDashboard.php?redirect=2');
     } else if (isset($_GET['msg']) && $_GET['msg'] == 2) {
         echo '<script language="javascript">';
         echo 'alert("You cannot block the current admin")';
         echo '</script>';
-        header('Refresh: 0; url=adminDashboard.php');
+        header('Refresh: 0; url=adminDashboard.php?redirect=2');
     }    
+
+    if (isset($_GET['redirect'])) {
+        echo '<script language="javascript">';
+        echo 'const redirect = ' . $_GET['redirect'];
+        echo '</script>';
+    }
 ?>
 
 <!DOCTYPE html>
@@ -388,7 +394,7 @@
         <div class="container">
             <div class="tab-container">
                 <div class="tabs">
-                    <div class="button active">Dashboard</div>
+                    <div class="button active" id="dashboard">Dashboard</div>
                     <div class="button" id="user-status">User Status</div>
                     <div class="button" id="admin-status">Admin Status</div>
                     <div class="button" id="list-topic">List Topics</div>

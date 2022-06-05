@@ -41,5 +41,9 @@
         }
     }
 
-    header('Refresh: 0; url=../adminDashboard.php');
+    if ($type == 'user') {
+        header('Refresh: 0; url=../adminDashboard.php?redirect=1');
+    } else if ($type == 'admin') {
+        header('Refresh: 0; url=../adminDashboard.php?redirect=2');
+    }
 ?>
