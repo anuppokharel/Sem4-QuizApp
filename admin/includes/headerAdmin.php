@@ -1,7 +1,7 @@
 <div class="header">
     <div class="container">
         <div class="logo">
-            <h1>Stock Quiz App</h1>
+            <a href="adminDashboard.php"><h1>Stock Quiz App</h1></a>
         </div>
         <div class="navbar-wrapper">
             <!-- <div class="navbar header">
@@ -16,7 +16,7 @@
                     <?php if (isset($_SESSION['username'])) { ?>
                         <img src="../images/profile-img/<?php echo $_SESSION['image']; ?>" id="profileImg">
                     <?php } else { ?>
-                        <a href="login.php"><i class="fas fa-user-circle"></i></a>
+                        <a href="../login.php?msg=5"><i class="fas fa-user-circle"></i></a>
                     <?php } ?>               
                 </div>
                 <div class="profile-dropdown">
@@ -26,8 +26,8 @@
                             <small id="profileName"><?php echo $_SESSION['name']; ?></small>
                         </div>
                         <div class="div2">
-                            <a href="profile.php">Profile</a>
-                            <a href="setting.php">Settings</a>
+                            <a href="adminProfile.php">Profile</a>
+                            <a href="adminSetting.php">Settings</a>
                             <?php if ($_SESSION['status'] == 1) { ?>
                                 <a href="../includes/logout.php">Log Out</a>
                             <?php } else { ?>

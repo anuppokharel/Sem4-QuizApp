@@ -1,14 +1,45 @@
 <?php
-    require '../../includes/connection.php';
+    require '../includes/sessionAdmin.php';
 
     $token = $_GET['token'];
-    $tokenName = $_GET['name'];
+    $type = $_GET['type'];
+    $id = $_SESSION['id'];
 
-    $sql = "update tbl_confidential set block = 0 where id = '$token'";
+    if ($type == 'user') {
+        $sql = "update tbl_confidential set block = 0 where id = '$token'";
+    } else if ($type == 'admin') {
+        if ($token === $id) {
+            try {
+                $sql = "select * from tbl_confidential where status = 1 and id = '$token'";
+        
+                $query = mysqli_query($connection, $sql);
+        
+                if (mysqli_num_rows($query) === 1) {
+                    header('location: ../adminDashboard.php?msg=2');
+                    exit();
+                }
+        
+            } catch (Exception $e) {
+                $error['database'] = $e -> getMessage();
+            }
+        } else {
+            $sql = "update tbl_confidential set block = 0 where id = '$token'";
+        }
+    }
 
     $query = mysqli_query($connection, $sql);
 
     if ($query) {
-        header('location: ../adminDashboard.php');
+        if ($type == 'user') {
+            echo '<script language="javascript">';
+            echo 'alert("User blocked successfully")';
+            echo '</script>';
+        } else if ($type == 'admin') {
+            echo '<script language="javascript">';
+            echo 'alert("Admin blocked successfully")';
+            echo '</script>';
+        }
     }
+
+    header('Refresh: 0; url=../adminDashboard.php');
 ?>

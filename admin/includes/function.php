@@ -67,9 +67,11 @@
         } else if ($difference -> i > 0) {
             $shortMsg .= $difference -> i . ' minutes ';
         }
+  
         if ($difference -> i <= 0) {
             $shortMsg .= 'just now';
         }
+  
         if ($difference -> i > 0) {
             $shortMsg .= ' ago';
         }

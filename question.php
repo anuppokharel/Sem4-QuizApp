@@ -3,10 +3,30 @@
     require 'includes/function.php';
     require 'includes/connection.php';
 
+    $noOfTime = [];
     $token = $_GET['id'];
+
+    try {
+        $sql = "select * from tbl_questions where id = $token";
+
+        $query = mysqli_query($connection, $sql);
+
+        if (mysqli_num_rows($query) > 0) {
+            while($data = mysqli_fetch_assoc($query)) {
+                array_push($noOfTime, $data);
+            }
+        }
+
+    } catch (Exception $e) {
+        $error['database'] = $e -> getMessage();
+    }
     
     echo '<script language="javascript">';
     echo 'let token =' . $token;
+    echo '</script>';
+    
+    echo '<script language="javascript">';
+    echo 'let noOfTime = ' . count($noOfTime);
     echo '</script>';
 ?>
 

@@ -64,7 +64,7 @@
             $password = $_POST['password'];
 
             if (!preg_match("/^[a-zA-Z0-9]+$/", $password)) {
-                $error['password'] = 'Provide a password with atleast a number';
+                $error['password'] = 'Provide a password which has uppercase character and a number';
             }
         } else {
             $error['password'] = 'Provide a password';

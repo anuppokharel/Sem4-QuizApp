@@ -1,14 +1,24 @@
 <?php
-    require '../../includes/connection.php';
+    require '../includes/connection.php';
 
     $token = $_GET['token'];
-    $tokenName = $_GET['name'];
+    $type = $_GET['type'];
 
     $sql = "update tbl_confidential set block = 1 where id = '$token'";
 
     $query = mysqli_query($connection, $sql);
 
     if ($query) {
-        header('location: ../adminDashboard.php');
+        if ($type == 'user') {
+            echo '<script language="javascript">';
+            echo 'alert("User unblocked successfully")';
+            echo '</script>';
+        } else if ($type == 'admin') {
+            echo '<script language="javascript">';
+            echo 'alert("Admin unblocked successfully")';
+            echo '</script>';
+        }
     }
+    
+    header("Refresh: 0; url=../adminDashboard.php");
 ?>

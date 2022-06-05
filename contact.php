@@ -55,11 +55,12 @@
 
         if (count($error) == 0) {
             try {
-                $sql = "insert into tbl_contact(username, email, message, password) values('$username', '$email', '$message', '$password')";
+                $sql = "insert into tbl_contacts(username, email, message, password) values('$username', '$email', '$message', '$password')";
 
                 $query = mysqli_query($connection, $sql);
 
                 if ($query) {
+                    $username = $email = $message = '';
                     $successMsg = 'Successfully placed a contact message';
                 }
 
@@ -98,12 +99,12 @@
                     <?php echo checkError($error, 'username'); ?>
                     <div class="items email">
                         <label for="email">email</label><br>
-                        <input type="text" name="email" id="email" placeholder="Enter your email address" value="<?php echo $username ?>">
+                        <input type="text" name="email" id="email" placeholder="Enter your email address" value="<?php echo $email ?>">
                     </div>
                     <?php echo checkError($error, 'email'); ?>
                     <div class="items message">
                         <label for="message">message</label><br>
-                        <textarea name="message" id="message" cols="50" rows="5" placeholder="Write your message"><?php echo $username ?></textarea>
+                        <textarea name="message" id="message" cols="50" rows="5" placeholder="Write your message"><?php echo $message ?></textarea>
                     </div>
                     <?php echo checkError($error, 'message'); ?>
                     <div class="items password">

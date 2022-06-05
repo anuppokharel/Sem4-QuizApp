@@ -1,4 +1,5 @@
 <?php
+    require '../includes/function.php';
     require '../includes/connection.php';
 
     $questions = [];
@@ -16,6 +17,11 @@
         if (mysqli_num_rows($query) > 0) {
             while($question = mysqli_fetch_assoc($query)) {
                 array_push($questions, $question);
+            }
+            
+            foreach($questions as $key => $question) {
+                $time = getPostedTime($question['created_at']);
+                array_push($questions, $time);
             }
             echo json_encode($questions);
         }

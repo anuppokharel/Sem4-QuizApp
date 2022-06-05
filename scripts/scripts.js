@@ -13,6 +13,10 @@ $(document).ready(function () {
         $('.profile-dropdown').removeClass("active");
     });
 
+    $('.admin-body').on('click', function () {
+        $('.profile-dropdown').removeClass("active");
+    });
+
     $('#country').change(function () {
         let countryId = $(this).val();
 
@@ -103,6 +107,12 @@ function changeContent(button, index) {
     });
 }
 
+// For profile picture change 
+
+$('#changeProfilePicture').change(function () {
+    $('#changeProfilePictureForm').submit();
+});
+
 // For main quiz part
 // Retrieving the data from database 
 
@@ -110,10 +120,9 @@ $.ajax({
     url: 'functions/getQuestion.php',
     data: { 'token': token },
     datatype: 'json',
-    async: 'disable',
     method: 'post',
-    success: function (data) {
-        quizQuestions = JSON.parse(data);
+    success: function (response) {
+        quizQuestions = JSON.parse(response);
         sendQuestion(quizQuestions);
     }
 });
@@ -131,8 +140,15 @@ function sendQuestion(quizQuestions) {
     const quizBtn = document.getElementById('quizSubmit');
     const quiz_image = document.getElementById('blogImg');
 
+    // var quizTime = [];
     let score = 0;
     let currentQuestionIndex = 0;
+    let questionsLength = quizQuestions.length - noOfTime;
+    let currentTimeIndex = questionsLength;
+
+    // for (let i = quizQuestions.length; i > quizQuestions.length - noOfTime; i--) {
+    //     quizTime.push(quizQuestions[i - 1]);
+    // }
 
     loadQuiz();
 
@@ -151,10 +167,10 @@ function sendQuestion(quizQuestions) {
         dLabel.innerText = fourthOption;
 
         attempt_container.innerHTML = `
-        <p><span>${currentQuestionIndex + 1}</span>out of<span>${quizQuestions.length}</span>question.&nbsp;</p>
+        <p><span>${currentQuestionIndex + 1}</span>out of<span>${quizQuestions.length - noOfTime}</span>question.&nbsp;</p>
         `;
         quiz_footer.innerHTML = `
-            <span id="timeField"></span>
+            <span id="timeField">${quizQuestions[currentTimeIndex]}</span>
             <p id="categoryField">${topic_name}</p>
         `;
     }
@@ -165,12 +181,23 @@ function sendQuestion(quizQuestions) {
         if (userAnswer === quizQuestions[currentQuestionIndex].answer) {
             score++;
         }
-        currentQuestionIndex++
-        if (currentQuestionIndex < quizQuestions.length) {
+        currentQuestionIndex++;
+        currentTimeIndex++;
+        if (currentQuestionIndex < quizQuestions.length - noOfTime) {
             loadQuiz();
         } else {
+
+            $.ajax({
+                url: 'functions/addScores.php',
+                data: { 'score': score, 'questionsLength': questionsLength },
+                datatype: 'text',
+                method: 'post',
+                success: function (response) {
+                    console.log(response);
+                }
+            });
             quiz_container.innerHTML = `
-                <h3>You have answered ${score} out of ${quizQuestions.length} questions </h3>
+                <h3>You have answered ${score} out of ${quizQuestions.length - noOfTime} questions </h3>
                 <div class="nextBtn">
                     <button onclick="location.reload()">Reload Quiz</button>
                 </div>

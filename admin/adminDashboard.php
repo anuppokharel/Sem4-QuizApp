@@ -1,6 +1,6 @@
 <?php
-    require_once '../includes/sessionAdmin.php';
-    require '../includes/function.php';
+    require_once 'includes/sessionAdmin.php';
+    require 'includes/function.php';
 
     $error = [];
     $countries = [];
@@ -74,7 +74,7 @@
     }
 
     try {
-        $sql = "select * from tbl_contact";
+        $sql = "select * from tbl_contacts";
 
         $query = mysqli_query($connection, $sql);
 
@@ -218,8 +218,7 @@
                     echo '</script>';
                 }
                 
-                header('location: adminDashboard.php');
-                
+                header('Refresh: 0; url=adminDashboard.php');
             } catch (Exception $e) {
                 $error['database'] = $e -> getMessage();
             }
@@ -263,6 +262,8 @@
                     echo 'alert("Topic added")';
                     echo '</script>';
                 }
+
+                header('Refresh: 0; url=adminDashboard.php');
             } catch (Exception $e) {
                 $error['database'] = $e -> getMessage();
             }
@@ -275,8 +276,8 @@
         if (checkForm($_POST, 'question')) {
             $question = $_POST['question'];
 
-            if (strlen($question) > 47) {
-                $error['question'] = 'Question character should be less then 47 characters';
+            if (strlen($question) > 100) {
+                $error['question'] = 'Question character should be less then 100 characters';
             }
         } else {
             $error['question'] = 'Enter your question';
@@ -336,22 +337,37 @@
         
         if (count($error) == 0) {
             try {
-                $sql = "insert into tbl_questions(question, firstOption, secondOption, thirdOption, fourthOption, answer, question_image, topic_id) values('$title', '$firstOption', '$secondOption', '$thirdOption', '$fourthOption', '$answer','$image','$topic_id')";
+                $question = mysqli_real_escape_string($connection, $question);
+
+                $sql = "insert into tbl_questions(question, firstOption, secondOption, thirdOption, fourthOption, answer, question_image, topic_id) values('$question', '$firstOption', '$secondOption', '$thirdOption', '$fourthOption', '$answer','$image','$topic_id')";
 
                 $query = mysqli_query($connection, $sql);
 
                 if ($query) {
-                    $title = $answer = $topic = '';
+                    $question = $answer = $topic_id = '';
                     echo '<script language="javascript">';
                     echo 'alert("Successfully added question")';
                     echo '</script>';
                 }
+
+                header('Refresh: 0; url=adminDashboard.php');
             } catch (Exception $e) {
-                $error['database '] = $e -> getMessage();
+                die($e -> getMessage());
             }
         }
     }
-    
+
+    if (isset($_GET['msg']) && $_GET['msg'] == 1) {
+        echo '<script language="javascript">';
+        echo 'alert("You cannot delete the current admin")';
+        echo '</script>';
+        header('Refresh: 0; url=adminDashboard.php');
+    } else if (isset($_GET['msg']) && $_GET['msg'] == 2) {
+        echo '<script language="javascript">';
+        echo 'alert("You cannot block the current admin")';
+        echo '</script>';
+        header('Refresh: 0; url=adminDashboard.php');
+    }    
 ?>
 
 <!DOCTYPE html>
@@ -366,19 +382,21 @@
 </head>
 <body>
     <div class="header">
-        <?php require '../includes/headerAdmin.php'; ?>
+        <?php require 'includes/headerAdmin.php'; ?>
     </div>
     <div class="admin-body">
         <div class="container">
             <div class="tab-container">
                 <div class="tabs">
                     <div class="button active">Dashboard</div>
-                    <div class="button">Add Admin</div>
-                    <div class="button">Add Topics/Categories</div>
-                    <div class="button">Add Questions & Answers</div>
-                    <div class="button">Admin/User Status</div>
-                    <div class="button">List Questions & Topics</div>
-                    <div class="button">View Contact Messages</div>
+                    <div class="button" id="user-status">User Status</div>
+                    <div class="button" id="admin-status">Admin Status</div>
+                    <div class="button" id="list-topic">List Topics</div>
+                    <div class="button" id="list-question">List Questions</div>
+                    <div class="button" id="add-admin">Add Admin</div>
+                    <div class="button" id="add-topic">Add Topics/Categories</div>
+                    <div class="button" id="add-question">Add Questions & Answers</div>
+                    <div class="button" id="contact-msg">View Contact Messages</div>
                 </div>
                 <div class="contents">
                     <div class="content active">
@@ -402,89 +420,202 @@
                         </div>
                     </div>
                     <div class="content">
-                        <div class="addAdmin-inner-container">
-                            <div class="addAdmin">
-                                <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
-                                    <div class="items name">
-                                        <label for="name">name</label><br>
-                                        <input type="text" name="name" id="name" placeholder="Full name" value="<?php echo $name; ?>">
-                                    </div>
-                                    <?php echo checkError($error, 'name'); ?>
-                                    <div class="items username">
-                                        <div class="label-username">
-                                            <label for="username">username</label>
-                                            <span class="queryMsgUsername"></span>
-                                        </div>
-                                        <input type="text" name="username" id="username" placeholder="Username" value="<?php echo $username; ?>">
-                                    </div>
-                                    <?php echo checkError($error, 'username'); ?>
-                                    <div class="items email">
-                                        <div class="label-email">
-                                            <label for="email">email</label>
-                                            <span class="queryMsgEmail"></span>
-                                        </div>
-                                        <input type="email" name="email" id="email" placeholder="Email" value="<?php echo $email; ?>">
-                                    </div>
-                                    <?php echo checkError($error, 'email'); ?>
-                                    <div class="items phone">
-                                        <label for="phone">phone</label><br>
-                                        <input type="number" name="phone" id="phone" placeholder="Phone number" value="<?php echo $phone; ?>">
-                                    </div>
-                                    <?php echo checkError($error, 'phone'); ?>
-                                    <div class="items password">
-                                        <label for="password">password</label><br>
-                                        <input type="password" name="password" id="password" placeholder="Password">
-                                    </div>
-                                    <?php echo checkError($error, 'password'); ?>
-                                    <div class="items confirmPassword">
-                                        <label for="confirmPassword">confirm password</label><br>
-                                        <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password">
-                                    </div>
-                                    <?php echo checkError($error, 'confirmPassword'); ?>
-                                    <div class="items gender">
-                                        <p style="margin-bottom: 5px">Gender</p>
-                                        <input type="radio" name="gender" id="male" value="male" style="width: min-content">
-                                        <label for="male">male</label>
-                                        <input type="radio" name="gender" id="female" value="female" style="width: min-content">
-                                        <label for="female">female</label>
-                                        <br><input type="radio" name="gender" id="others" value="others" style="width: min-content">
-                                        <label for="other">others</label>
-                                    </div>
-                                    <?php echo checkError($error, 'gender'); ?>
-                                    <div class="items image">
-                                        <label for="image">add image</label><br>
-                                        <input type="file" name="image" id="addImage">            
-                                    </div>
-                                    <?php echo checkError($error, 'imageAddAdmin'); ?>
-                                    <div class="items country">
-                                        <label for="country">country</label><br>
-                                        <select name="country" id="country">
-                                            <option value=""><b>Select your country</b></option>
-                                            <?php foreach($countries as $country) { ?>
-                                                <option value="<?php echo $country['id']; ?>"><?php echo $country['country_name']; ?></option>
-                                            <?php } ?>
-                                        </select>
-                                    </div>
-                                    <?php echo checkError($error, 'country'); ?>
-                                    <div class="items city">
-                                        <label for="city">city</label><br>
-                                        <select name="city" id="city">
-                                            <option value=""><b>Select your city</b></option>
-                                        </select>
-                                    </div>
-                                    <?php echo checkError($error, 'city'); ?>
-                                    <div class="items addAdminBtn">
-                                         <button type="submit" name="addAdminBtn">Add</button>
-                                    </div>
-                                    <div class="items error">
-                                        <?php echo checkError($error, 'database'); ?>
-                                    </div>
-                                </form>
+                        <div class="table-inner-container">
+                            <div class="users-container">
+                                <h3>User Status</h3>
+                                <table class="admin-panel-table">
+                                    <tr>
+                                        <th>S.N.</th>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    <?php foreach ($users as $key => $user) { ?>
+                                        <tr>
+                                            <td><?php echo $key + 1; ?></td>
+                                            <td><?php echo $user['name']; ?></td>
+                                            <td><?php echo $user['username']; ?></td>
+                                            <td><?php echo $user['email']; ?></td>
+                                            <td><?php echo $user['phone']; ?></td>
+                                            <td>
+                                                <?php if ($user['block'] == 0) { ?>
+                                                    <a href="functions/unblock.php?token=<?php echo $user['id']; ?>&type=user" style="color: green" onclick= "return confirm('Are you sure you want to unblock this user?')">Unblock</a>
+                                                <?php } else { ?>
+                                                    <a href="functions/block.php?token=<?php echo $user['id']; ?>&type=user" style="color: red" onclick= "return confirm('Are you sure you want to block this user?')">Block</a>
+                                                <?php } ?>
+                                                <br><a href="functions/delete.php?token=<?php echo $user['id']; ?>&type=user" style="color: red" onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </table>
                             </div>
                         </div>
                     </div>
                     <div class="content">
-                        <div class="topic-inner-container">
+                        <div class="table-inner-container">
+                            <div class="admin-container">
+                                <h3>Admin Status</h3>
+                                <table class="admin-panel-table">
+                                    <tr>
+                                        <th>S.N.</th>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    <?php foreach ($admins as $key => $admin) { ?>
+                                        <tr>
+                                            <td><?php echo $key + 1; ?></td>
+                                            <td><?php echo $admin['name']; ?></td>
+                                            <td><?php echo $admin['username']; ?></td>
+                                            <td><?php echo $admin['email']; ?></td>
+                                            <td><?php echo $admin['phone']; ?></td>
+                                            <td>
+                                                <?php if ($admin['block'] == 0) { ?>
+                                                    <a href="functions/unblock.php?token=<?php echo $admin['id']; ?>&type=admin" style="color: green" onclick="return confirm('Are you sure you want to unblock this admin')">Unblock</a>
+                                                <?php } else { ?>
+                                                    <a href="functions/block.php?token=<?php echo $admin['id']; ?>&type=admin" style="color: red" onclick="return confirm('Are you sure you want to block this admin?')">Block</a>
+                                                <?php } ?>
+                                                    <br><a href="functions/delete.php?token=<?php echo $admin['id']; ?>&type=admin" style="color: red" onclick="return confirm('Are you sure you want to delete this admin?')">Delete</a>
+                                            </td>
+                                        </tr>   
+                                    <?php } ?>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="table-inner-container">
+                            <h3>Topics</h3>
+                            <table class="admin-panel-table">
+                                <tr>
+                                    <th>Topic name</th>
+                                    <th>Action</th>
+                                </tr>
+                                <?php foreach($topics as $topic) { ?>
+                                    <tr>
+                                        <td><?php echo $topic['topic_name']; ?></td>
+                                        <td>
+                                            <a href="functions/delete.php?token=<?php echo $topic['id']; ?>&type=topic" style="color: red" onclick="return confirm('Are you sure you want to delete this admin?')">Delete</a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="table-inner-container">
+                            <h3>Questions</h3>
+                            <table class="admin-panel-table">
+                                <tr>
+                                    <th>Topic</th>
+                                    <th>Title</th>
+                                    <th>Answer</th>
+                                    <th>Created at</th>
+                                    <th>Action</th>
+                                </tr>
+                                <?php foreach($questions as $question) { ?>
+                                    <tr>
+                                        <td><?php echo $question['topic_id']; ?></td>
+                                        <td><?php echo $question['question']; ?></td>
+                                        <td><?php echo $question['answer']; ?></td>
+                                        <td><?php echo $question['created_at']; ?></td>
+                                        <td>
+                                            <a href="functions/delete.php?token=<?php echo $topic['id']; ?>&type=question" style="color: red" onclick="return confirm('Are you sure you want to delete this admin?')">Delete</a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="content">
+                        <div class="form-inner-container">
+                            <h3>Add Admin</h3>
+                            <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
+                                <div class="items name">
+                                    <label for="name">name</label><br>
+                                    <input type="text" name="name" id="name" placeholder="Full name" value="<?php echo $name; ?>">
+                                </div>
+                                <?php echo checkError($error, 'name'); ?>
+                                <div class="items username">
+                                    <div class="label-username">
+                                        <label for="username">username</label>
+                                        <span class="queryMsgUsername"></span>
+                                    </div>
+                                    <input type="text" name="username" id="username" placeholder="Username" value="<?php echo $username; ?>">
+                                </div>
+                                <?php echo checkError($error, 'username'); ?>
+                                <div class="items email">
+                                    <div class="label-email">
+                                        <label for="email">email</label>
+                                        <span class="queryMsgEmail"></span>
+                                    </div>
+                                    <input type="email" name="email" id="email" placeholder="Email" value="<?php echo $email; ?>">
+                                </div>
+                                <?php echo checkError($error, 'email'); ?>
+                                <div class="items phone">
+                                    <label for="phone">phone</label><br>
+                                    <input type="number" name="phone" id="phone" placeholder="Phone number" value="<?php echo $phone; ?>">
+                                </div>
+                                <?php echo checkError($error, 'phone'); ?>
+                                <div class="items password">
+                                    <label for="password">password</label><br>
+                                    <input type="password" name="password" id="password" placeholder="Password">
+                                </div>
+                                <?php echo checkError($error, 'password'); ?>
+                                <div class="items confirmPassword">
+                                    <label for="confirmPassword">confirm password</label><br>
+                                    <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password">
+                                </div>
+                                <?php echo checkError($error, 'confirmPassword'); ?>
+                                <div class="items gender">
+                                    <p style="margin-bottom: 5px">Gender</p>
+                                    <input type="radio" name="gender" id="male" value="male" style="width: min-content">
+                                    <label for="male">male</label>
+                                    <input type="radio" name="gender" id="female" value="female" style="width: min-content">
+                                    <label for="female">female</label>
+                                    <br><input type="radio" name="gender" id="others" value="others" style="width: min-content">
+                                    <label for="other">others</label>
+                                </div>
+                                <?php echo checkError($error, 'gender'); ?>
+                                <div class="items image">
+                                    <label for="image">add image</label><br>
+                                    <input type="file" name="image" id="addImage">            
+                                </div>
+                                <?php echo checkError($error, 'imageAddAdmin'); ?>
+                                <div class="items country">
+                                    <label for="country">country</label><br>
+                                    <select name="country" id="country">
+                                        <option value=""><b>Select your country</b></option>
+                                        <?php foreach($countries as $country) { ?>
+                                            <option value="<?php echo $country['id']; ?>"><?php echo $country['country_name']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <?php echo checkError($error, 'country'); ?>
+                                <div class="items city">
+                                    <label for="city">city</label><br>
+                                    <select name="city" id="city">
+                                        <option value=""><b>Select your city</b></option>
+                                    </select>
+                                </div>
+                                <?php echo checkError($error, 'city'); ?>
+                                <div class="items addAdminBtn">
+                                     <button type="submit" name="addAdminBtn">Add</button>
+                                </div>
+                                <div class="items error">
+                                    <?php echo checkError($error, 'database'); ?>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="form-inner-container">
+                            <h3>Add Topics</h3>
                             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
                                 <div class="items title">
                                     <label for="topicName">Topic name</label>
@@ -503,7 +634,8 @@
                         </div>
                     </div>
                     <div class="content">
-                        <div class="question-inner-container">
+                        <div class="form-inner-container">
+                            <h3>Add Question & Answer</h3>
                             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
                                 <div class="items question">
                                     <label for="question">question</label>
@@ -563,109 +695,9 @@
                         </div>
                     </div>
                     <div class="content">
-                        <div class="status-inner-container">
-                            <div class="admin-container">
-                                <h3 style="padding: 15px 0;">Admin Status</h3>
-                                <table border="1">
-                                    <tr>
-                                        <th>S.N.</th>
-                                        <th>Name</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Action</th>
-                                    </tr>
-                                    <?php foreach ($admins as $key => $admin) { ?>
-                                        <tr>
-                                            <td><?php echo $key + 1; ?></td>
-                                            <td><?php echo $admin['name']; ?></td>
-                                            <td><?php echo $admin['username']; ?></td>
-                                            <td><?php echo $admin['email']; ?></td>
-                                            <td><?php echo $admin['phone']; ?></td>
-                                            <td>
-                                                <?php if ($admin['block'] == 0) { ?>
-                                                    <a href="functions/unblock.php?token=<?php echo $admin['id']; ?>" style="color: green" onclick="return confirm('Are you sure you want to unblock this admin')">Unblock</a>
-                                                <?php } else { ?>
-                                                    <a href="functions/block.php?token=<?php echo $admin['id']; ?>" style="color: red" onclick="return confirm('Are you sure you want to block this admin?')">Block</a>
-                                                <?php } ?>
-                                                <br><a href="functions/delete.php?token=<?php echo $admin['id']; ?>" style="color: red" onclick="return confirm('Are you sure you want to delete this admin?')">Delete</a>
-                                            </td>
-                                        </tr>   
-                                    <?php } ?>
-                                </table>
-                            </div>
-                            <div class="users-container">
-                                <h3 style="padding: 15px 0;">User Status</h3>
-                                <table border="1">
-                                    <tr>
-                                        <th>S.N.</th>
-                                        <th>Name</th>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
-                                        <th>Action</th>
-                                    </tr>
-                                    <?php foreach ($users as $key => $user) { ?>
-                                        <tr>
-                                            <td><?php echo $key + 1; ?></td>
-                                            <td><?php echo $user['name']; ?></td>
-                                            <td><?php echo $user['username']; ?></td>
-                                            <td><?php echo $user['email']; ?></td>
-                                            <td><?php echo $user['phone']; ?></td>
-                                            <td>
-                                                <?php if ($user['block'] == 0) { ?>
-                                                    <a href="functions/unblock.php?token=<?php echo $user['id']; ?>" style="color: green" onclick= "return confirm('Are you sure you want to unblock this user?')">Unblock</a>
-                                                <?php } else { ?>
-                                                    <a href="functions/block.php?token=<?php echo $user['id']; ?>" style="color: red" onclick= "return confirm('Are you sure you want to block this user?')">Block</a>
-                                                <?php } ?>
-                                                <br><a href="functions/delete.php?token=<?php echo $user['id']; ?>" style="color: red" onclick="return confirm('Are you sure you want to delete this admin?')">Delete</a>
-                                            </td>
-                                        </tr>
-                                    <?php } ?>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="content">
-                        <div class="list-inner-container">
-                            <h3>Questions</h3>
-                            <table border="1">
-                                <tr>
-                                    <th>Topic</th>
-                                    <th>Title</th>
-                                    <th>Answer</th>
-                                    <th>Created at</th>
-                                    <th>Action</th>
-                                </tr>
-                                <?php foreach($questions as $question) { ?>
-                                    <tr>
-                                        <td><?php echo $question['topic_id']; ?></td>
-                                        <td><?php echo $question['question']; ?></td>
-                                        <td><?php echo $question['answer']; ?></td>
-                                        <td><?php echo $question['created_at']; ?></td>
-                                        <td><a href="" style="color: red">Block</a></td>
-                                    </tr>
-                                <?php } ?>
-                            </table>
-                            <h3>Topics</h3>
-                            <table border="1">
-                                <tr>
-                                    <th>Topic name</th>
-                                    <th>Action</th>
-                                </tr>
-                                <?php foreach($topics as $topic) { ?>
-                                    <tr>
-                                        <td><?php echo $topic['topic_name']; ?></td>
-                                        <td><a href="" style="color: red">Block</a></td>
-                                    </tr>
-                                <?php } ?>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="content">
-                        <div class="contact-inner-container">
+                        <div class="table-inner-container">
                             <h3>Contact messages</h3>
-                            <table border="1">
+                            <table class="admin-panel-table">
                                 <tr>
                                     <th>Username</th>
                                     <th>Email</th>
@@ -677,7 +709,7 @@
                                         <td><?php echo $contact['username']; ?></td>
                                         <td><?php echo $contact['email']; ?></td>
                                         <td><?php echo $contact['message']; ?></td>
-                                        <td><a href="" style="color: red">Block</a></td>
+                                        <td><a href="functions/delete.php?token=<?php echo $contact['id']; ?>&type=contact" style="color: red" onclick="return confirm('Are you sure you want to delete this contact message?')">Delete</a></td>
                                     </tr>
                                 <?php } ?>
                             </table>
@@ -688,7 +720,7 @@
         </div>
     </div>
     <div class="footer">
-        <?php require '../includes/footerAdmin.php'; ?>
+        <?php require 'includes/footerAdmin.php'; ?>
     </div>
 
     <!-- jQuery and JavaScript  -->

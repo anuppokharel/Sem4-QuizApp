@@ -163,15 +163,8 @@
 
 .card-wrapper .statistics {
     display: flex;
-    margin: 20px 0 20px 0;
+    margin: 0 0 20px 0;
     width: max-content;
-}
-
-.container.profile .share {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-evenly;
 }
 
 .card-wrapper .statistics .statistics-inner .statistics-subheader {
@@ -221,7 +214,7 @@
 }
 
 .card.quiz {
-    height: 275px;
+    height: 250px;
     width: 250px;
     margin: 20px 0 0 0;
     overflow: hidden;
@@ -234,7 +227,6 @@
     margin: 20px 0 0 0;
     overflow: hidden;
     position: relative;
-    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 .card.topics h4 {
@@ -334,6 +326,13 @@ button:hover {
     user-select: none;
 }
 
+.question-header h3 {
+    width: 225px;
+    white-space: pre;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .question-footer {
     display: flex;
     justify-content: space-between;
@@ -352,6 +351,9 @@ button:hover {
     border-radius: 5px;
 }
 
+h3 {
+    user-select: none;
+}
 
 .options {
     padding: 5px 25px;
@@ -394,9 +396,35 @@ button:hover {
     justify-content: center;
 }
 
+.profile-info-wrapper p {
+    padding: 2.5px 0 0 0;
+}
+
+#changeProfilePicture {
+    visibility: hidden;
+}
+
+#changeProfilePictureDiv {
+    margin-top: 2.5px;
+    margin-bottom: 0;
+}
+
+#changeProfilePictureDiv label {
+    cursor: pointer;
+    color: grey;
+}
+
+#changeProfilePictureDiv label:hover {
+    color: #000;
+}
+
 #timeField,
 #categoryField {
     user-select: none;
+}
+
+#timeField {
+    margin-right: 15px;
 }
 
 .aboutUs p {
@@ -420,11 +448,65 @@ button:hover {
     height: 90vh;
 }
 
+.admin-body .setting-container {
+    background-color: #fff;
+    height: 75vh;
+    width: 75%;
+    overflow: hidden;
+}
+
 .admin-body .container {
+    background-color: #fff;
+    height: 82.5vh;
+    width: 75%;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+
+.admin-body .container-profile {
     background-color: #fff;
     height: 75vh;
     width: 75%;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.admin-body .container-profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-body .container-profile .admin-profile {
+    text-align: center;
+}
+
+.admin-body .container-profile .admin-profile img {
+    border-radius: 50%;
+    border: 2.5px solid grey;
+}
+
+#role {
+    margin: 5px 0 .5px 0;
+    height: 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#role span {
+    background-color: grey;
+    color: #fff;
+    padding: 2px 21px;
+    font-size: 18px;
+    font-weight: 575;
+    border-radius: 7.5px;
+}
+
+#role span:hover {
+    background-color: #000;
 }
 
 .admin-body .container .tab-container {
@@ -466,23 +548,25 @@ button:hover {
     transform: translateY(100%);
     transition: transform .9s ease;
     height: 100%;
+    width: 100%;
 }
 
 .admin-body .container .tab-container .contents .content.active {
     transform: translateY(0);
 }
 
-.admin-body .container .tab-container .contents .content .content-inner-container {
-    /* border: 1px solid #000; */
-    height: 100%;
+.admin-body .container .tab-container .contents .content h3 {
+    padding: 15px 0;
 }
 
+/* Dashboard */
+
 .admin-body .container .tab-container .contents .content .total-inner-container {
+    border: 1px solid #000;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    /* border: 1px solid #000; */
     height: 100%;
 }
 
@@ -490,48 +574,46 @@ button:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 25px 50px;
+    padding: 15px 60px;
     margin: 0 15px;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
-.admin-body .container .tab-container .contents .content .addAdmin-inner-container .addAdmin {
-    padding: 25px 215px 0 215px;
-    /* border: 1px solid #000; */
-}
+/* Table */
 
-.admin-body .container .tab-container .contents .content .status-inner-container {
-    /* border: 1px solid #000; */
+.admin-body .container .tab-container .contents .content .table-inner-container {
+    border: 1px solid #000;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 25px 50px;
     height: 100%;
 }
 
-.admin-body .container .tab-container .contents .content .question-inner-container {
-    padding: 25px 230px;
-    /* border: 1px solid #000; */
-    height: 100%;
+.admin-panel-table {
+    margin: 0 10px;
+    border-collapse: collapse;
+    border: 1px solid #000;
 }
 
-.admin-body .container .tab-container .contents .content .topic-inner-container {
-    padding: 25px 230px;
-    /* border: 1px solid #000; */
-    height: 100%;
+.admin-panel-table th {
+    background-color: #000;
+    color: #fff;
+    padding: 2.5px 7.5px;
 }
 
-.admin-body .container .tab-container .contents .content .list-inner-container {
-    /* border: 1px solid #000; */
-    padding: 25px 175px;
-    height: 100%;
+.admin-panel-table td {
+    padding: 5px;
 }
 
-.admin-body .container .tab-container .contents .content .contact-inner-container {
-    /* border: 1px solid #000; */
-    padding: 25px 254px;
-    height: 100%;
+/* Form  */
+
+.admin-body .container .tab-container .contents .content .form-inner-container {
+    padding: 0 225px;
+}
+
+.admin-body .container .tab-container .contents .content .form-inner-container h3 {
+    text-align: center;
 }
 
 /* Footer  */

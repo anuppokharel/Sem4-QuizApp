@@ -54,6 +54,7 @@
                     session_start();
 
                     $_SESSION['token'] = $userdata['status'];
+                    $_SESSION['id'] = $userdata['id'];
                     $_SESSION['name'] = $userdata['name'];
                     $_SESSION['username'] = $userdata['username'];
                     $_SESSION['image'] = $userdata['profile_img'];
@@ -69,8 +70,6 @@
                     } else if ($userdata['status'] == 2) {
                         $username = '';
                         header('location: home.php');
-                    } else {
-
                     }
                 } else {
                     $error['database'] = 'Invalid username or password';

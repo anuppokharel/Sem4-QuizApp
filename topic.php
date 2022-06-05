@@ -5,25 +5,11 @@
     require 'includes/function.php';
     require 'includes/connection.php';
 
-    $topics = [];
-    $questions =[];
+    $questions = [];
+    $token = $_GET['id'];
 
     try {
-        $sql = "select * from tbl_topics limit 9";
-
-        $query = mysqli_query($connection, $sql);
-
-        if (mysqli_num_rows($query) > 0) {
-            while($topic = mysqli_fetch_assoc($query)) {
-                array_push($topics, $topic);
-            }
-        }
-    } catch (Exception $e) {
-        $error['database'] = $e -> getMessage();
-    }
-
-    try {
-        $sql = "select tbl_questions.*, tbl_topics.topic_name from tbl_questions join tbl_topics on tbl_questions.topic_id = tbl_topics.id order by tbl_questions.created_at limit 4";
+        $sql = "select tbl_questions.*, tbl_topics.topic_name from tbl_questions join tbl_topics on tbl_questions.topic_id = tbl_topics.id where tbl_topics.id = $token";
 
         $query = mysqli_query($connection, $sql);
 
@@ -54,13 +40,9 @@
     </div>
     <div class="body-container">
         <h3 class="body-header quiz">
-            Start quiz    
-        </h3>
-        <div class="card-wrapper quiz">
-            <a href="quiz.php?id=999" id="quizBtn">Start quiz</a>
-        </div>
-        <h3 class="body-header quiz">
-            Recently quizzes
+            <?php foreach($questions as $question) { ?>
+                <?php echo $question['topic_name']; ?>
+            <?php } ?>
         </h3>
         <div class="card-wrapper">
             <?php foreach($questions as $question) { ?>
@@ -76,22 +58,6 @@
                         </div>
                     </a>
                 </div>
-            <?php } ?>
-        </div>
-        <!-- <div class="body-footer quiz">
-            <button>Load more</button>
-        </div> -->
-        <h3 class="body-header topics">
-            Popular topics
-        </h3>
-        <div class="card-wrapper">
-            <?php foreach($topics as $topic) { ?>
-                <a href="topic.php?id=<?php echo $topic['id']; ?>">
-                    <div class="card topics">
-                        <img src="images/topic-img/<?php echo $topic['image']; ?>" alt="" id="topicImg">
-                        <h4><?php echo $topic['topic_name']; ?></h4>
-                    </div>
-                </a>
             <?php } ?>
         </div>
         <!-- <div class="body-footer quiz">
