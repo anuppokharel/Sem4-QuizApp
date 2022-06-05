@@ -47,8 +47,10 @@
     </div>
     <div class="body-container">
         <div class="card-wrappeer">
-            <div class="mainCard">
-                <img src="images/blog-img/" alt="" style="height: 200px; width: 450px; object-fit: cover;" id="blogImg">
+            <div class="mainCard large">
+                <div class="blogImgMainCard">
+                    <img src="images/blog-img/" alt="" style="height: 200px; width: 450px; object-fit: cover;" id="blogImg">
+                </div> 
                 <div class="question-header">
                     <h2>Question</h2>
                 </div>
