@@ -59,6 +59,13 @@
         <div class="card-wrapper quiz">
             <a href="quiz.php?id=999" id="quizBtn">Start quiz</a>
         </div>
+        <div>
+            <?php
+                if (isset($_GET['msg']) && $_GET['msg'] == 1) {
+                    echo '<p class="error" style="text-align: center; margin-top: 25px">Currently there are no questions to start the quiz!</p>';
+                }
+            ?>
+        </div>
         <h3 class="body-header quiz">
             Recently quizzes
         </h3>

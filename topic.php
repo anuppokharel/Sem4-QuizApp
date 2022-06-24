@@ -17,6 +17,8 @@
             while($question = mysqli_fetch_assoc($query)) {
                 array_push($questions, $question);
             }
+        } else {
+            $noQuiz = 1;
         }
     } catch (Exception $e) {
         $error['database'] = $e -> getMessage();
@@ -45,6 +47,7 @@
             <?php } ?>
         </h3>
         <div class="card-wrapper">
+            <?php if(isset($noQuiz) && $noQuiz == 1) { echo '<h2 class="error" style="text-align: center">No quiz available<br>in this section</h2>'; } ?>
             <?php foreach($questions as $question) { ?>
                 <div class="card quiz">
                     <a href="question.php?id=<?php echo $question['id']; ?>" style="color: #000">

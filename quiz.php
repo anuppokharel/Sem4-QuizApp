@@ -15,6 +15,8 @@
             while($data = mysqli_fetch_assoc($query)) {
                 array_push($noOfTime, $data);
             }
+        } else {
+            header('location: home.php?msg=1');
         }
 
     } catch (Exception $e) {

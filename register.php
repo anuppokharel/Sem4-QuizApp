@@ -167,7 +167,7 @@
                 <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post" enctype="multipart/form-data">
                     <div class="items name">
                         <label for="name">name</label><br>
-                        <input type="text" name="name" id="name" placeholder="Full name" value="<?php echo $name; ?>">
+                        <input type="text" name="name" id="name" placeholder="Full name" autocomplete="off" value="<?php echo $name; ?>">
                     </div>
                     <?php echo checkError($error, 'name'); ?>
                     <div class="items username">
